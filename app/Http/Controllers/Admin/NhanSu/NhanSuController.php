@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\Controllers\Admin\NhanSu;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Model\NhanSu\DonViModel;
+use App\Model\NhanSu\DangKyHatNhanModel;
+use App\Model\NhanSu\NhanVienModel;
+use App\Model\NhanSu\QuaTrinhCongHienModel;
+use App\Model\NhanSu\ThongKeCongHienModel;
+use App\Model\NhanSu\MaNhanVienModel;
+use App\Model\NhanSu\CongHien\DT_KhaiBaoModel;
+use App\Model\NhanSu\CongHien\TG_KhaiBaoModel;
+use App\Model\NhanSu\CongHien\DaoTaoModel;
+use App\Model\NhanSu\CongHien\TangGiamModel;
+use App\Model\NhanSu\CongHien\ThamNienModel;
+use App\Model\NhanSu\Luong\BangBDModel;
+use App\Model\NhanSu\Luong\BangCDModel;
+use App\Model\NhanSu\Luong\BangKhaiBaoModel;
+use App\Model\NhanSu\Luong\LuongThangModel;
+use Session;
+use Auth;
+use DB;
+use ImportExcel;
+use Excel;
+class NhanSuController extends Controller
+{
+	function __construct()
+	{
+		$this->mess = [
+			'required' => 'Kiểm tra các trường :Attribute không được bỏ trống',
+			'image' => 'phải là hình ảnh',
+			'mimes' => 'Chỉ chấp nhận đuôi .jpg|jpeg|png',
+			'max' => 'Hình không lớn hơn 4MB'
+		];
+	}
+	public function vHoSoNhanVien(){
+		$hoso = 1;
+		return view('Admin.NhanSu.infonv')->with(['hoso'=>$hoso]);
+	}
+	public function vCapNhatNhanSu(){
+		return view('Admin.NhanSu.addNV');
+	}
+	public function pCapNhatNhanSu(Request $Request){
+
+	}
+	public function vKhaiBaoLuong(){
+		$dieukhoan = BangKhaiBaoModel::get();
+		return view ("Admin.NhanSu.khaibaoluong",compact('dieukhoan'));
+	}
+	public function pKhaiBaoLuong(Request $Request){
+		$mess = [
+			'required'=>"Không bỏ trống các trường bắt buộc",
+			'tien.min' => "Số tiền phải lớn hơn 0"
+		];
+		$Request->validate([
+			'dieukhoan' =>'required|string',
+			'loai' => 'required',
+			'tien' => 'required|min:1'
+		],$mess);
+		$luong = new Luong;
+		$luong->KhaiBaoDieuKhoan($Request);
+		return back();
+	}
+	public function vBangLuongNhanVien(){
+		$luongthang = LuongThangModel::select('thang')->groupBy('thang')->orderBy('thang',"DESC")->get();
+		return view('Admin.NhanSu.luongnhanvien')->with(['luongthang'=>$luongthang]);
+	}
+	public function vThongKeLuongTheoThang($thang){
+		$luongthang = DB::select(DB::raw("select a.manv,a.hoten,b.banga,b.bangb,b.bangc,b.bangd,b.bange,b.bangf,b.bangg,b.luongct,b.luongthuclanh,b.thang
+			from NHANSU_MaNhanVien a ,  NHANSU_NHANVIEN_BANGLUONG_Thang b
+			where a.manv = b.manv and b.thang ='$thang'"));
+		return view('Admin.NhanSu.ajax.bangluongtheothang',compact('luongthang'));
+	}
+	public function ChotLuong(){
+		$luong = new Luong;
+		$luong->ChotLuongThang(7,'170605195A');
+	}
+	public function ViewInfo($manv){
+		$thongtincanhan = MaNhanVienModel::with(['ThongTiNhanVien'])->where('manv',$manv)->get()->first();
+
+		return view('Admin.NhanSu.ajax.detailinfo');
+	}
+	public function test(){
+		$manv = '100518183V';
+		$thongtincanhan = MaNhanVienModel::with(['ThongTiNhanVien'])->where('manv',$manv)->get()->first();
+		dd($thongtincanhan->ThongTiNhanVien->thuocdv);
+	}
+}

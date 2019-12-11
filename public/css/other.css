@@ -1,0 +1,16 @@
+.input-text-dotted{
+	border:none !important;
+	border-bottom:thin dashed black !important;
+	background: #fff !important;
+	padding-bottom:0;
+	outline:none;
+}
+.breadcrumb .active>a{
+	color: red;
+}
+.input-date-dotted{
+	border:none !important;
+	border-bottom:thin dashed black !important;
+	padding-bottom:0;
+	outline:none;
+}
