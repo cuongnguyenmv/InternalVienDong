@@ -1,4 +1,11 @@
 <?php
+use App\User;
+use App\Model\NhanSu\MaNhanVienModel;
+use App\Model\NhanSu\CongHien\DaoTaoModel;
+use App\Model\NhanSu\CongHien\DT_KhaiBaoModel;
+use App\Model\NhanSu\CongHien\TangGiamModel;
+use App\Model\NhanSu\CongHien\TG_KhaiBaoModel;
+use App\Model\NhanSu\CongHien\ThamNienModel;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,10 +18,8 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-// Route::get('/','PublicController@Index')->name('index');
+
+Route::get('/','PublicController@Index')->name('index');
 Route::get('nhan-vien/{idcard}','HomeController@ThongTinCaNhanSearch');
 Route::group(['prefix'=>'admin'],function(){
 	Route::get('news','Admin\AdminController@dashboard');
@@ -41,6 +46,70 @@ Auth::routes();
 
 Route::get('test','Admin\NhanSu\NhanSuController@test');
 
-Route::get('/',function(){
-	return 'YOU HAVE BEEN HACKED !!! ';
+
+// migrate data
+Route::get('migrate',function(){
+	$data = \DB::connection('sqlsrv2')->table('users')->get();
+	foreach ($data as $key ) {
+		User::updateOrCreate(['email'=>$key->email],[
+			'name' => $key->name,
+			'email' => $key->email,
+			'password' => $key->password,
+			'remember_token' => $key->remember_token,
+			'manv' => $key->Manv,
+		]);
+	}
 });
+Route::get('migrate2',function(){
+	$data = \DB::connection('sqlsrv2')->table('STAFF')->get();
+	foreach ($data as $key ) {
+		MaNhanVienModel::updateOrCreate(['manv'=>$key->Staff_ID],[
+			'manv'=>$key->Staff_ID,
+			'hoten'=>$key->Full_name,
+			'idcard'=>$key->Id_Card,
+			'ngaychinhthuc'=>$key->Start_work,
+			'ngayvaolam' =>$key->Start_work,
+			'congty' => $key->Company,
+		]);
+	}
+});
+
+Route::get('migrate3',function(){
+	$data = \DB::connection('sqlsrv2')->table('HOATDONGNOIBO')->get();
+	foreach($data as $key){
+		DT_KhaiBaoModel::updateOrCreate(['madaotao'=>$key->Mahoatdong],[
+		'madaotao' => $key->Mahoatdong,
+		'tenhoatdong' => $key->Tenhoatdong,
+		'ngayhieuluc' => $key->Ngaydienra,
+		'TL' => $key->TL,
+		'KT' => $key->KT,
+		'KN' => $key->KN,
+		'CM' => $key->CM,
+		'NT' => $key->NT,
+		'CD' => $key->CD,
+		'TC' => $key->TC,
+		]);
+	}
+});
+
+Route::get('migrate4',function(){
+	$data = \DB::connection('sqlsrv2')->table('DIEMDANHHOATDONG')->get();
+	foreach($data as $key){
+		$ins = new DaoTaoModel;
+		$ins->madaotao = $key->Mahoatdong;
+		$ins->manv = $key->Staff_ID;
+		$ins->ngaythamgia = $key->Ngayhoatdong;
+		$ins->TL = $key->TL;
+		$ins->KT = $key->KT;
+		$ins->KN = $key->KN;
+		$ins->CM = $key->CM;
+		$ins->NT = $key->NT;
+		$ins->CD = $key->CD;
+		$ins->TC = $key->TC;
+		$ins->save();
+	}
+});
+
+Route::get('migrate5',function(){
+	$data = \DB::connection('sqlsrv2')->select(\DB::raw());
+})
