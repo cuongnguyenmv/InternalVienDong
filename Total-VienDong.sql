@@ -239,31 +239,41 @@ nguoinhan nvarchar(20),
 created_at date not null,
 updated_at date not null
 )
+
+
 create table CSVC_TAISAN_ThanhLy(
 id int identity(1,1) not null,
 matl nvarchar(20) primary key,
+seri nvarchar(100) null,
 tents nvarchar(max) not null,
 hinh1 nvarchar(100) not null,
 hinh2 nvarchar(100) null,
 hinh3 nvarchar(100) null,
 mota nvarchar(max) null,
-trangthai int not null default(1) , /* 0:đã bán ,1:đang bán,2:hết hạn,3:đợi định giá xác nhận, 
+trangthai int not null default(3) , /* 0:đã bán ,1:đang bán,2:hết hạn,3:đợi định giá xác nhận, 
 										4:Không chấp nhận */
 nguongoc nvarchar(20) not null, /* của 1 nhân viên hay của công ty */
 nguoimua nvarchar(20) null, /* người mua được cập nhật sau khi đấu giá thành công */
-ngaydaugia date not null,
+ngaydaugia date  null,
 ngayketthuc date null,
 dinhgia float null,
+madaugia nvarchar(20) null,
 created_at date not null,
 updated_at date not null
 )
+
 create table CSVC_TAISAN_DauGiaThanhLy(
-id int identity(1,1) primary key,
+id int identity(1,1),
+madaugia nvarchar(20) not null,
 matl nvarchar(20) foreign key references CSVC_TAISAN_ThanhLy(matl) not null,
 manv nvarchar(20) foreign key references NHANSU_NHANVIEN_ViTien(manv) not null,
-trangthai int not null default(0), /* 0: */
+trangthai int not null default(0), /* 0:dang doi ket qua, 1 : da ban , 2: fail */
+sohat float not null,
+created_at date not null,
+updated_at date not null
 )
-
+drop table CSVC_TAISAN_ThanhLy
+drop table CSVC_TAISAN_DauGiaThanhLy
 select * From NHANSU_NHANVIEN_LUONG_TuoiVaoLam
 /*												Mua hàng								*/
 

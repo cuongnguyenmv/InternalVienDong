@@ -1,6 +1,7 @@
 <?php
 use App\User;
 use App\Model\NhanSu\MaNhanVienModel;
+use App\Model\NhanSu\NhanVienModel;
 use App\Model\NhanSu\CongHien\DaoTaoModel;
 use App\Model\NhanSu\CongHien\DT_KhaiBaoModel;
 use App\Model\NhanSu\CongHien\TangGiamModel;
@@ -21,6 +22,11 @@ use App\Model\NhanSu\CongHien\ThamNienModel;
 
 Route::get('/','PublicController@Index')->name('index');
 Route::get('nhan-vien/{idcard}','HomeController@ThongTinCaNhanSearch');
+Route::get('san-pham-thanh-ly','HomeController@SanPhamThanhLy')->name('cac-san-pham-tl');
+Route::get('san-pham-thanh-ly/{matl}','HomeController@ChiTietSanPhamThanhLy');
+Route::get('dang-ky-thanh-ly','HomeController@NguoiDungThanhLy')->name('dang-ky-thanh-ly');
+Route::post('dang-ky-thanh-ly','HomeController@pNguoiDungThanhLy');
+Route::post('dau-gia-thanh-ly','HomeController@GuiDauGia')->name('dau-gia-thanh-ly');
 Route::group(['prefix'=>'admin'],function(){
 	Route::get('news','Admin\AdminController@dashboard');
 
@@ -39,7 +45,9 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::get('chot-luong','Admin\NhanSu\NhanSuController@ChotLuong');
 	});
 	Route::group(['prefix'=>'csvc'],function(){
-		
+		Route::get('duyet-tl','Admin\CSVC\CoSoVatChatController@ChiTietThanhLy')->name('duyet-tl');
+		Route::get('duyet-tl/{matl}','Admin\CSVC\CoSoVatChatController@DuyetThanhLy');
+		Route::post('duyet-tl/{matl}','Admin\CSVC\CoSoVatChatController@pDuyetThanhLy');
 	});
 });
 Auth::routes();
@@ -111,5 +119,16 @@ Route::get('migrate4',function(){
 });
 
 Route::get('migrate5',function(){
-	$data = \DB::connection('sqlsrv2')->select(\DB::raw());
-})
+	$data = \DB::connection('sqlsrv2')->select(\DB::raw("select * FROM STAFF"));
+	foreach ($data as $key ) {
+		NhanVienModel::updateOrCreate(['manv'=>$key->Staff_ID],
+			[
+				'manv'=>$key->Staff_ID,
+				'tennv'=>$key->Full_name,
+				'sdt'=>$key->DTDD,
+				'congty'=>$key->Company,
+				'ngaysinh'=>$key->DOB
+
+		]);
+	}
+});

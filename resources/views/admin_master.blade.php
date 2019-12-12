@@ -279,7 +279,7 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
                 <li data-menu=""><a class="dropdown-item" href="../vertical-menu-template" data-toggle="dropdown">Classic Menu</a>
                 </li>
                 <li data-menu=""><a class="dropdown-item" href="../vertical-compact-menu-template"
-                  data-toggle="dropdown">Compact Menu</a>
+                  data-toggle="dropdown"></a>
                 </li>
                 <li data-menu=""><a class="dropdown-item" href="../vertical-content-menu-template"
                   data-toggle="dropdown">Content Menu</a>
@@ -292,13 +292,13 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
                 </li>
               </ul>
             </li>
-            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Horizontal</a>
+            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Thanh Lý Giá Trị</a>
               <ul class="dropdown-menu">
-                <li data-menu=""><a class="dropdown-item" href="../horizontal-menu-template" data-toggle="dropdown">Classic</a>
+                <li data-menu=""><a class="dropdown-item" href="{{route('duyet-tl')}}" data-toggle="dropdown">Sản phẩm Thanh Lý Đợi Duyệt</a>
                 </li>
-                <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
+               <!--  <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
                   data-toggle="dropdown">Top Icon</a>
-                </li>
+                </li> -->
               </ul>
             </li>
           </ul>
@@ -336,7 +336,15 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
         </li>
         <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="fa fa-th-list"></i><span data-i18n="nav.templates.main">Mở rộng tính năng</span></a>
           <ul class="dropdown-menu">
-            
+            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Thanh lý giá trị</a>
+                <ul class="dropdown-menu">
+                  <li data-menu=""><a class="dropdown-item" href="{{route('cac-san-pham-tl')}}" data-toggle="dropdown">Các sản phẩm thanh lý</a>
+                  </li>
+                  <li data-menu=""><a class="dropdown-item" href="{{route('dang-ky-thanh-ly')}}"
+                    data-toggle="dropdown">Đăng ký thanh lý giá trị</a>
+                  </li>
+                </ul>
+              </li>
           </ul>
         </li>
       </ul>
