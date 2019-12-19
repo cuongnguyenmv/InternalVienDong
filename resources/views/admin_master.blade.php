@@ -226,17 +226,29 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
             </li>
             <li class="dropdown dropdown-user nav-item">
               <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                @if(Auth::check())
                 <span class="avatar avatar-online">
                   <img src="{{URL::asset('images/1.jpg')}}"
                   alt="avatar"><i></i></span>
-                <span class="user-name">John Doe</span>
+                <span class="user-name">{{Auth::User()->name}}</span>
+                @else
+                 <span class="avatar avatar-online">
+                  <img src="{{URL::asset('images/1.jpg')}}"
+                  alt="avatar"><i></i></span>
+                <span class="user-name">{{Auth::User()->name}}</span>
+                @endif
               </a>
-              <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Edit Profile</a>
-                <a
+              <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('profile')}}"><i class="ft-user"></i> Profile</a> <a class="dropdown-item"
+                  href="{{route('vi-tien')}}"><i class="fa fa-credit-card"></i> Ví tiền</a>
+                <!-- <a
                 class="dropdown-item" href="#"><i class="ft-mail"></i> My Inbox</a>
                   <a class="dropdown-item" href="#"><i class="ft-check-square"></i> Task</a><a class="dropdown-item"
-                  href="#"><i class="ft-message-square"></i> Chats</a>
-                  <div class="dropdown-divider"></div><a class="dropdown-item" href="#"><i class="ft-power"></i> Logout</a>
+                  href="#"><i class="ft-message-square"></i> Chats</a> -->
+                 
+                  <div class="dropdown-divider"></div><a class="dropdown-item" onclick="$('#logout-form').submit()"><i class="ft-power"></i> Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
               </div>
             </li>
           </ul>
@@ -274,26 +286,17 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
         </li>
         <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="fa fa-database"></i><span data-i18n="nav.templates.main">Cơ sở vật chất</span></a>
           <ul class="dropdown-menu">
-            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Cơ sở vật chất</a>
+            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Quản lý tài sản</a>
               <ul class="dropdown-menu">
-                <li data-menu=""><a class="dropdown-item" href="../vertical-menu-template" data-toggle="dropdown">Classic Menu</a>
+               <!--  <li data-menu=""><a class="dropdown-item" href="../vertical-menu-template" data-toggle="dropdown">Classic Menu</a>
                 </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-compact-menu-template"
-                  data-toggle="dropdown"></a>
-                </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-content-menu-template"
-                  data-toggle="dropdown">Content Menu</a>
-                </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-overlay-menu-template"
-                  data-toggle="dropdown">Overlay Menu</a>
-                </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-multi-level-menu-template"
-                  data-toggle="dropdown">Multi-level Menu</a>
-                </li>
+                -->
               </ul>
             </li>
             <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Thanh Lý Giá Trị</a>
               <ul class="dropdown-menu">
+              <!--   <li data-menu=""><a class="dropdown-item" href="{{route('nhan-dau-gia')}}" data-toggle="dropdown">Duyệt giá gửi</a>
+                </li> -->
                 <li data-menu=""><a class="dropdown-item" href="{{route('duyet-tl')}}" data-toggle="dropdown">Sản phẩm Thanh Lý Đợi Duyệt</a>
                 </li>
                <!--  <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
@@ -305,24 +308,18 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
         </li>
         <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="fa fa-clipboard"></i><span data-i18n="nav.templates.main">Kế toán</span></a>
           <ul class="dropdown-menu">
-            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Cơ sở vật chất</a>
+            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Ví tiền nội bộ</a>
               <ul class="dropdown-menu">
-                <li data-menu=""><a class="dropdown-item" href="../vertical-menu-template" data-toggle="dropdown">Classic Menu</a>
+                <li data-menu=""><a class="dropdown-item" href="{{route('muc-quy-doi')}}" data-toggle="dropdown">Cập nhật mức quy đổi</a>
                 </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-compact-menu-template"
-                  data-toggle="dropdown">Compact Menu</a>
+                <li data-menu=""><a class="dropdown-item" href="{{route('cac-quy-doi')}}"
+                  data-toggle="dropdown">Quy đổi hạt - tiền</a>
                 </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-content-menu-template"
-                  data-toggle="dropdown">Content Menu</a>
-                </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-overlay-menu-template"
-                  data-toggle="dropdown">Overlay Menu</a>
-                </li>
-                <li data-menu=""><a class="dropdown-item" href="../vertical-multi-level-menu-template"
-                  data-toggle="dropdown">Multi-level Menu</a>
-                </li>
+              <!--   <li data-menu=""><a class="dropdown-item" href=""
+                  data-toggle="dropdown">Quy đổi tiền - hạt</a>
+                </li> -->
               </ul>
-            </li>
+            </li><!-- 
             <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Horizontal</a>
               <ul class="dropdown-menu">
                 <li data-menu=""><a class="dropdown-item" href="../horizontal-menu-template" data-toggle="dropdown">Classic</a>
@@ -331,7 +328,7 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
                   data-toggle="dropdown">Top Icon</a>
                 </li>
               </ul>
-            </li>
+            </li> -->
           </ul>
         </li>
         <li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown"><i class="fa fa-th-list"></i><span data-i18n="nav.templates.main">Mở rộng tính năng</span></a>

@@ -14,6 +14,13 @@ congty nvarchar(100) null,
 created_at date not null,
 updated_at date not null
 )
+create table Users_PhanQuyen(
+id int identity(1,1) not null,
+manv nvarchar(20) foreign key references users(manv),
+auth nvarchar(20) not null,
+created_at date not null,
+updated_at date not null
+)
 
 create table NHANSU_DonVi(
 id int identity(1,1) not null,
@@ -219,27 +226,29 @@ created_at date not null,
 updated_at date not null,
 )
 /*												Ví tiền hạt								*/
-create table NHANSU_NHANVIEN_ViTien(
-id int identity(1,1) not null,
-manv nvarchar(20) primary key foreign key references NHANSU_MaNhanVien(manv),
-sohat float not null default(0),
-trangthai int not null default(1) , /*0:lock , 1: active , 2: waiting */
-created_at date not null,
+
+
+create table USERS_VITIEN_MaQuyDoi(
+maqd nvarchar(20) primary key,
+noidung nvarchar(100) not null,
+sohat float not null,
+mucconghien float not null,
+tylethem float not null,
+created_at date not null,	
 updated_at date not null
 )
-create table NHANSU_NHANVIEN_GiaoDich(
+create table USERS_VITIEN_GiaoDich(
 id int identity(1,1) primary key,
 phiengd nvarchar(20) not null,
-manv nvarchar(20) foreign key references NHANSU_NHANVIEN_ViTien(manv),
+manv nvarchar(20) foreign key references users(manv),
 noidung nvarchar(100) null,
 sohat float not null default(0),
-trangthai int not null default(0), /* 0: nạp tiền , 1: mua đồ , 2:bán đồ  */
-nguoichuyen nvarchar(20) ,
+trangthai int not null default(0), /* 0: nạp tiền , 1: mua đồ , 2:bán đồ ,3: Quy đổi ch , 4:Quy đổi tiền thật */
+nguoichuyen nvarchar(20) null ,
 nguoinhan nvarchar(20),
 created_at date not null,
 updated_at date not null
 )
-
 
 create table CSVC_TAISAN_ThanhLy(
 id int identity(1,1) not null,
@@ -256,24 +265,25 @@ nguongoc nvarchar(20) not null, /* của 1 nhân viên hay của công ty */
 nguoimua nvarchar(20) null, /* người mua được cập nhật sau khi đấu giá thành công */
 ngaydaugia date  null,
 ngayketthuc date null,
+giatri int not null,
 dinhgia float null,
 madaugia nvarchar(20) null,
 created_at date not null,
 updated_at date not null
 )
-
+select * FROM users
 create table CSVC_TAISAN_DauGiaThanhLy(
 id int identity(1,1),
 madaugia nvarchar(20) not null,
 matl nvarchar(20) foreign key references CSVC_TAISAN_ThanhLy(matl) not null,
-manv nvarchar(20) foreign key references NHANSU_NHANVIEN_ViTien(manv) not null,
-trangthai int not null default(0), /* 0:dang doi ket qua, 1 : da ban , 2: fail */
+manv nvarchar(20) foreign key references users(manv) not null,
+trangthai int not null default(0), /* 0:dang doi ket qua, 1 : da ban , 2: fail , 3:Đợi duyệt */
 sohat float not null,
 created_at date not null,
 updated_at date not null
 )
-drop table CSVC_TAISAN_ThanhLy
-drop table CSVC_TAISAN_DauGiaThanhLy
+
+select * FROM CSVC_TAISAN_ThanhLy
 select * From NHANSU_NHANVIEN_LUONG_TuoiVaoLam
 /*												Mua hàng								*/
 
@@ -325,4 +335,40 @@ select a.manv,sum(b.tien) as 'tien'
  insert into NHANSU_NHANVIEN_BANGLUONG_BienDong values ('170605195A','D2',1,'2019-07-01',null,getdate(),getdate())
  insert into NHANSU_NHANVIEN_BANGLUONG_BienDong values ('170605195A','D1',1,'2019-07-01',null,getdate(),getdate())
  insert into NHANSU_NHANVIEN_BANGLUONG_BienDong values ('170605195A','D3',1,'2019-07-01',null,getdate(),getdate())
+ 
+insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
+ create trigger update_sohat on  USERS_VITIEN_GiaoDich FOR
+ INSERT,UPDATE,DELETE
+ AS BEGIN
+  Declare @manv nvarchar(20)
+  SET NOCOUNT ON;
+  select @manv = (
+  select manv from inserted union all 
+  select manv from deleted )
+  update users set sohat = (SELECT CASE WHEN SUM(sohat) is not null then SUM(sohat) else 0 end from USERS_VITIEN_GiaoDich where manv = @manv) where manv = @manv
+ END
 
+ drop trigger update_sohat
+ select * FROM USERS_VITIEN_GiaoDich
+ select * FROM USERS_VITIEN_MaQuyDoi
+ select * FROM 
+  select * FROM USERS_VITIEN_MaQuyDoi
+ insert into USERS_VITIEN_GiaoDich values ('QD1','180604297C',N'Mức cống hiến 1400',1400,3,null,'180604297C',getdate(),getdate())
+ select * FROM users where name like N'%Toàn'
+ delete from USERS_VITIEN_GiaoDich
+ select * From NHANSU_ThongKeCongHien
+ select * FROM NHANSU_CONGHIEN_DaoTao
+ select a.*,b.email,b.sdt,b.chucvu,b.hinh,b.ngaysinh,b.diachi FROM NHANSU_MaNhanVien a, NHANSU_Nhanvien b
+ where a.manv = b.manv
+
+ select manv, sum(TL) as 'TL' , sum(KT) as 'KT', sum(KN) as 'KN' , SUM(NT) as 'NT' , sum(CD) as 'CD' , SUM(TC) as 'TC',sum(Tong) as 'Tong'
+ from NHANSU_CONGHIEN_DaoTao where manv = '170605195A'
+ group by manv
+
+ select * FROM NHANSU_ThongKeCongHien
+
+ select * FROM NHANSU_CONGHIEN_TangGiam
+ select * FROM USERS_VITIEN_GiaoDich
+ select * FROM USERS_VITIEN_MaQuyDoi
+ select * FROM CSVC_TAISAN_DauGiaThanhLy
+ insert into USERS_VITIEN_GiaoDich values ('QD2','180604297C',N'Mức cống hiến 2600',260,3,N'Hệ thống chuyển đổi',null,getdate(),getdate())

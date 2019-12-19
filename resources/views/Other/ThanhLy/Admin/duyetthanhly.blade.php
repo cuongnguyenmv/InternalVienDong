@@ -3,13 +3,17 @@
 <div class="app-content container center-layout mt-2">
 	<div class="row">
 		<div class="col-4">
-			<img src="{{URL::asset('images/TaiSan')}}/{{$sp->hinh1}}" height="300px" width="100%">
+			<img src="{{URL::asset('images/TaiSan')}}/{{$sp->hinh1}}"  width="100%">
 			<div class="row mt-1">
 				@if(!empty($sp->hinh2))
 				<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$sp->hinh2}}"  width="100%"></div>
-				@elseif(!empty($sp->hinh3))
+        @endif
+				@if(!empty($sp->hinh3))
 				<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$sp->hinh3}}"  width="100%"></div>
 				@endif
+        @if(!empty($sp->hinh4))
+        <div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$sp->hinh4}}"  width="100%"></div>
+        @endif
 			</div>
 		</div>
 		<div class="col-8">
@@ -28,6 +32,8 @@
 							</div>
 							@endif
 			<ul class="list-group">
+            <li class="list-group-item">Người gửi: {{$sp->name}}</li>  
+          <li class="list-group-item">Số điện thoại: {{$sp->sdt}}</li>  
 					  <li class="list-group-item">Mã sản phẩm: 
 					  	<input type="text" name="matl" value="{{$sp->matl}}"  class="form-control">
 					  </li>	
@@ -35,13 +41,17 @@
                       		<input type="text" name="tents" value="{{$sp->tents}}"  class="form-control">
                       	</li>
                       <li class="list-group-item">Mô tả:
-                      	<textarea class="form-control" name="mota"> {{$sp->mota}}</textarea>
+
+                       <textarea name="mota" id="ckeditor" cols="30" rows="15" class="ckeditor form-control">
+                           {!! $sp->mota !!}
+                        </textarea>
                       </li>
                       <li class="list-group-item">Hình ảnh
                       	<div class="row">
-                      		<input type="file" name="hinh1" class="col-4">
-                      		<input type="file" name="hinh2" class="col-4">
-                      		<input type="file" name="hinh3" class="col-4">
+                      		<input type="file" name="hinh1" class="col-3">
+                      		<input type="file" name="hinh2" class="col-3">
+                      		<input type="file" name="hinh3" class="col-3">
+                          <input type="file" name="hinh4" class="col-3">
                       	</div>
                       
                       </li>
@@ -73,4 +83,8 @@
 		</div>
 	</div>
 </div>
+@endsection
+@section('js')
+
+  <script src="{{URL::asset('template/app-assets/vendors/js/editors/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
 @endsection

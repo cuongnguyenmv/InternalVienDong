@@ -82,9 +82,51 @@ class NhanSuController extends Controller
 
 		return view('Admin.NhanSu.ajax.detailinfo');
 	}
-	public function test(){
-		$manv = '100518183V';
-		$thongtincanhan = MaNhanVienModel::with(['ThongTiNhanVien'])->where('manv',$manv)->get()->first();
-		dd($thongtincanhan->ThongTiNhanVien->thuocdv);
+	// public function test(Request $req){
+	// 		$file = $req->file;
+	// 		Excel::load($file,function($reader){
+	// 			$nv = $reader->all();
+	// 			foreach ($nv as $manv) {
+	// 				// NhanSuController::updateCongHienHienTai($manv->manv);
+	// 			}
+	// 		});
+	// }
+	public function test(Request $Request){
+		$file = $Request->file;
+		// Excel::selectSheets('Sheet1')->load($file,function($reader){
+		// 	$data = $reader->all();
+		// 	// dd($data);
+		// 	foreach ($data as $key ) {
+		// 		TG_KhaiBaoModel::updateOrCreate(['matg'=>$key->matg],
+		// 			['matg'=>$key->matg,'tentg'=>$key->noidung,'ngayhieuluc'=>$key->ngay,'diemtg'=>$key->diem
+		// 		]);
+		// 	}
+		// });
+		Excel::selectSheets('Sheet2')->load($file,function($reader){
+			$data = $reader->all();
+			// dd($data);
+			foreach ($data as $key ) {
+				TangGiamModel::updateOrCreate(
+					['manv'=>$key->manv,'matg'=>$key->matg,'ngayhieuluc'=>$key->ngay],
+					['manv'=>$key->manv,'matg'=>$key->matg,'ngayhieuluc'=>$key->ngay,'diem'=>$key->diem]
+				);
+			}
+		});
+	}
+	public function updateThang12($manv){
+		$last = ThamNienModel::where('manv',$manv)->orderBy('ngaycapnhat','DESC')->get()->first();
+			ThamNienModel::updateOrCreate(['manv'=>$last->manv,'ngaycapnhat'=>'2019-12-01'],
+					[	'manv'=>$last->manv,
+						'ngaycapnhat'=>'2019-12-01',
+						'trainghiem'=>$last->trainghiem,
+						'vanhoa'=>$last->vanhoa +100
+					]);
+	}
+	public function updateCongHienHienTai($manv){
+		 $daotao = DaoTaoModel::where('manv',$manv)->select('Tong')->sum('Tong');
+		 $conghien = ThamNienModel::where('manv',$manv)->orderBy('ngaycapnhat','DESC')->get()->first();
+		 $trainghiem = $conghien->trainghiem;
+		 $vanhoa = $conghien->vanhoa;
+		ThongKeCongHienModel::updateOrCreate(['manv'=>$manv],['trainghiem'=>$trainghiem,'vanhoa'=>$vanhoa,'daotao'=>$daotao]);
 	}
 }

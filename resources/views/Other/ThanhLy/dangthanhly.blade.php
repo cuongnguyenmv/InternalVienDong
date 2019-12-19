@@ -44,6 +44,7 @@
 										<label class="text-bold-600">Email</label>
 										<input type="text" value="{{$info->email}}" class="form-control" readonly="">
 									</div>
+
 								</div>
 							</div>
 							<div class="row">
@@ -58,23 +59,11 @@
 										<input type="text" name="tents" class="form-control">
 									</div>
 									<div class="form-group">
-										<label class="text-bold-600">Mô tả / Thông số kỹ thuật</label>
-										<textarea class="form-control" name="mota" cols="4"></textarea>
-									</div>
-									<div class="form-group row">
-										<div class="col-4">
-										<label class="text-bold-600">Hình1 </label>
-										<input type="file" name="hinh1" class="form-control">
-										</div>
-										<div class="col-4">
-										<label class="text-bold-600">Hình2 </label>
-										<input type="file" name="hinh2" class="form-control">
-										</div>
-										<div class="col-4">
-										<label class="text-bold-600">Hình3 </label>
-										<input type="file" name="hinh3" class="form-control">
-										</div>
-									</div>
+										 <textarea name="mota" id="ckeditor" cols="30" rows="15" class="ckeditor form-control">
+								
+									</textarea>
+											</div>
+									
 								</div>
 								<div class="col-6">
 									<div class="form-group">
@@ -84,6 +73,24 @@
 									<div class="form-group">
 										<label class="text-bold-600">Tự định giá</label>
 										<input type="number" name="dinhgia" class="form-control">
+									</div>
+									<div class="form-group row">
+										<div class="col-3">
+										<label class="text-bold-600">Hình1 </label>
+										<input type="file" name="hinh1" class="form-control">
+										</div>
+										<div class="col-3">
+										<label class="text-bold-600">Hình2 </label>
+										<input type="file" name="hinh2" class="form-control">
+										</div>
+										<div class="col-3">
+										<label class="text-bold-600">Hình3 </label>
+										<input type="file" name="hinh3" class="form-control">
+										</div>
+										<div class="col-3">
+										<label class="text-bold-600">Hình4 </label>
+										<input type="file" name="hinh4" class="form-control">
+										</div>
 									</div>
 								</div>
 								
@@ -99,4 +106,8 @@
 		</div>
 	</div>
 </div>
+@endsection
+@section('js')
+
+  <script src="{{URL::asset('template/app-assets/vendors/js/editors/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
 @endsection

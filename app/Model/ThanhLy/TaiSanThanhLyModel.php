@@ -10,6 +10,6 @@ class TaiSanThanhLyModel extends Model
     protected $keyType = 'string';
     protected $primaryKey = 'matl';
     protected $fillable = [
-    	'id','matl','tents','hinh1','hinh2','hinh3','mota','trangthai','nguongoc','nguoimua','ngaydaugia','ngayketthuc','dinhgia' ,'seri','madaugia'
+    	'id','matl','tents','hinh1','hinh2','hinh3','hinh4','mota','trangthai','nguongoc','nguoimua','ngaydaugia','ngayketthuc','dinhgia' ,'seri','madaugia','giatri'
     ];
 }

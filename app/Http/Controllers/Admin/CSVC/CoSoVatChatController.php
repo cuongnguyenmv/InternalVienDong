@@ -18,8 +18,7 @@ use App\Model\NhanSu\CongHien\ThamNienModel;
 use App\Model\Other\ElectionEvents\DanhSachSuKienModel;
 use App\Model\Other\ElectionEvents\KetQuaBinhChonModel;
 use App\Model\ThanhLy\DauGiaThanhLyModel;
-use App\Model\ThanhLy\TaiSanThanhLyModel;
-
+use App\Model\ThanhLy\TaiSanThanhLyModel;          
 use Session;
 use Auth;
 use DB;
@@ -28,6 +27,7 @@ class CoSoVatChatController extends Controller
 {
 	function __construct()
 	{
+       $this->middleware('csvc-auth');
 		$this->election = new ElectionEvents;
 	}
    	public function ElectionIndex(){
@@ -95,9 +95,32 @@ where b.manv = c.manv and a.nguongoc = b.manv");
             $Request->hinh3->move('images/TaiSan/ThanhLy',$hinh3); 
             $data['hinh3'] = $hinh3;
           }
+           if($Request->has('hinh4')){
+            $hinh4 = $Request->hinh4->getClientOriginalName();
+            $extension = substr($hinh4, strpos($hinh4, "."));
+            $hinh4 = str_replace($hinh4, 'ThanhLy/'.$data['matl'].'4'.$extension, $hinh4);
+            $Request->hinh4->move('images/TaiSan/ThanhLy',$hinh4); 
+            $data['hinh4'] = $hinh4;
+          }
           if(TaiSanThanhLyModel::updateOrCreate(['matl'=>$matl],$data))
             Session::flash('status','Đã cập nhật lên sàn');
          return back();
       }
-  
+      public function TheoDoiThanhLy(){
+        $sp = TaiSanThanhLyModel::where('trangthai',1)->get();
+        return view('Other.ThanhLy.Admin.ketquathanhly')->with(['sp'=>$sp]);
+      }
+      public function KetQuaDauGia($madaugia){
+        $info = DB::select("select  a.*,b.manv,b.sohat,c.tennv FROM CSVC_TAISAN_ThanhLy a, CSVC_TAISAN_DauGiaThanhLy b, NHANSU_Nhanvien c
+          where a.madaugia  = b.madaugia and a.matl = b.matl and b.manv = c.manv and b.madaugia = '$madaugia' and b.trangthai = 0 order by sohat
+          ");
+        $sp = TaiSanThanhLyModel::where('madaugia',$madaugia)->get()->first();
+        return view('Other.ThanhLy.Admin.ketquathanhly')->with(['info'=>$info,'sp'=>$sp]);
+      }
+      public function NhanDauGia(){
+        return view('Other.ThanhLy.Admin.nhandaugia');
+      }
+      public function pNhanDauGia(Request $Request){
+        
+      }
 }

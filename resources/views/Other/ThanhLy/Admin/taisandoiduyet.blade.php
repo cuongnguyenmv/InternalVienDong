@@ -26,17 +26,23 @@
 									<td>{{$i++}}</td>
 									<td>{{$key->tents}}</td>
 									<td><div class="row">
-										<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$key->hinh2}}" height="80px" width="auto" ></div>
+										<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$key->hinh1}}" height="80px" width="auto" ></div>
 										@if(!empty($key->hinh2))
-										<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$key->hinh2}}" height="80px" width="auto" ></div>
-										@elseif(!empty($key->hinh3))
+										<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$key->hinh2}}" height="80px" width="auto" ></div>@endif
+										@if(!empty($key->hinh3))
 										<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$key->hinh3}}" height="80px" width="auto" ></div>
+										@endif
+										@if(!empty($key->hinh4))
+										<div class="col-4"><img src="{{URL::asset('images/TaiSan')}}/{{$key->hinh4}}" height="80px" width="auto" ></div>
 										@endif
 										
 									</div></td>
 									<td>{{$key->name}}</td>
 									<td>
 										<a href="./duyet-tl/{{$key->matl}}" class="btn btn-success"><i class="ft-check"></i></a>
+										@if(!empty($key->madaugia))
+										<a href="./ket-qua-dau-gia/{{$key->madaugia}}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+										@endif
 									</td>
 								</tr>@endforeach
 

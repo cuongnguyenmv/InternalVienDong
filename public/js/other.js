@@ -60,12 +60,12 @@ function HoSoNhanVien(){
 				ChartDaoTao()
 				ChartLuong()
 				ChartLuongThucLanh()
-				FormatNumber(11111111)
+				
 			}
 		})
 	})
 }
-function ChartDaoTao(){
+function ChartDaoTao(tl,kt,kn,nt,cd,tc){
 var donutChart = c3.generate({
         bindto: '#donut-chart',
         color: {
@@ -77,12 +77,12 @@ var donutChart = c3.generate({
         data: {
         	order:null,
             columns: [
-                ['Tâm Lý', 400],
-                ['Kiến Thức', 800],
-                ['Kỹ Năng', 100],
-                ['Nghệ Thuật', 300],
-                ['Cộng Đồng', 900],
-                ['Thể Chất', 300],
+                ['Tâm Lý', tl],
+                ['Kiến Thức', kt],
+                ['Kỹ Năng', kn],
+                ['Nghệ Thuật', nt],
+                ['Cộng Đồng', cd],
+                ['Thể Chất', tc],
 
             ],
             type : 'donut',
@@ -205,4 +205,28 @@ function ChartLuongThucLanh(){
 function FormatNumber(number){
 var formated  = new Intl.NumberFormat('de-DE').format(number)
 return formated;
+}
+
+
+function kt_switch(){
+    $('.breadcrumb-item').each(function(){
+        var active = $(this)
+        var a = $(this).find('a')
+        a.click(function(){
+            event.preventDefault()
+            var nav = $(this).text()
+            $('.div-show').hide()
+            $('.breadcrumb-item').removeClass('active')
+            switch(nav){
+                case 'Mức quy đổi hiện tại':
+                    active.addClass('active')
+                    $("#bangquydoi").fadeIn(1000)
+                break;
+                case 'Thêm mức quy đổi':
+                    active.addClass('active')
+                    $("#themquydoi").fadeIn(1000)
+                break;
+            }
+        })
+    })
 }
