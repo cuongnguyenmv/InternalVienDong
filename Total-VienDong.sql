@@ -239,7 +239,7 @@ updated_at date not null
 )
 create table USERS_VITIEN_GiaoDich(
 id int identity(1,1) primary key,
-phiengd nvarchar(20) not null,
+phiengd nvarchar(100) not null,
 manv nvarchar(20) foreign key references users(manv),
 noidung nvarchar(100) null,
 sohat float not null default(0),
@@ -271,7 +271,6 @@ madaugia nvarchar(20) null,
 created_at date not null,
 updated_at date not null
 )
-select * FROM users
 create table CSVC_TAISAN_DauGiaThanhLy(
 id int identity(1,1),
 madaugia nvarchar(20) not null,
@@ -284,6 +283,7 @@ updated_at date not null
 )
 
 select * FROM CSVC_TAISAN_ThanhLy
+select * FROM USERS_VITIEN_GiaoDich
 select * From NHANSU_NHANVIEN_LUONG_TuoiVaoLam
 /*												Mua hàng								*/
 
@@ -372,3 +372,13 @@ insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
  select * FROM USERS_VITIEN_MaQuyDoi
  select * FROM CSVC_TAISAN_DauGiaThanhLy
  insert into USERS_VITIEN_GiaoDich values ('QD2','180604297C',N'Mức cống hiến 2600',260,3,N'Hệ thống chuyển đổi',null,getdate(),getdate())
+
+ select name,sohat FROM users
+ select * FROM users
+ select * FROM CSVC_TAISAN_DauGiaThanhLy
+ 
+ select DISTINCT madaugia,manv,max(sohat)
+ from CSVC_TAISAN_DauGiaThanhLy where manv = '130218186M' and trangthai = 0
+ group by madaugia,manv
+ insert into CSVC_TAISAN_DauGiaThanhLy values('CT.19.51-191219-002','CN17','130218186M',0,444,getdate(),getdate())
+ insert into CSVC_TAISAN_DauGiaThanhLy values('CT.19.51-191219-003','CN17','130218186M',0,444,getdate(),getdate())

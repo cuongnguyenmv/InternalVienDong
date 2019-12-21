@@ -71,6 +71,10 @@
 										<input type="ser" name="seri" class="form-control">
 									</div>
 									<div class="form-group">
+										<label class="text-bold-600">Giá trị sản phẩm</label>
+										<input type="number" name="giatri" class="form-control">
+									</div>
+									<div class="form-group">
 										<label class="text-bold-600">Tự định giá</label>
 										<input type="number" name="dinhgia" class="form-control">
 									</div>

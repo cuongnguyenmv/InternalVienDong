@@ -51,6 +51,7 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::get('duyet-tl/{matl}','Admin\CSVC\CoSoVatChatController@DuyetThanhLy');
 		Route::post('duyet-tl/{matl}','Admin\CSVC\CoSoVatChatController@pDuyetThanhLy');
 		Route::get('ket-qua-dau-gia/{madaugia}','Admin\CSVC\CoSoVatChatController@KetQuaDauGia');
+		Route::post('ket-qua-dau-gia/{madaugia}','Admin\CSVC\CoSoVatChatController@ChotDauGia');
 		Route::get('nhan-dau-gia','Admin\CSVC\CoSoVatChatController@NhanGiaDau')->name('nhan-dau-gia');
 	});
 	Route::group(['prefix'=>'ke-toan'],function(){

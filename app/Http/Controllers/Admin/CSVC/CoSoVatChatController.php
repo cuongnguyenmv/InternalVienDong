@@ -19,6 +19,8 @@ use App\Model\Other\ElectionEvents\DanhSachSuKienModel;
 use App\Model\Other\ElectionEvents\KetQuaBinhChonModel;
 use App\Model\ThanhLy\DauGiaThanhLyModel;
 use App\Model\ThanhLy\TaiSanThanhLyModel;          
+use App\Model\KeToan\GiaoDichModel;
+use App\Model\KeToan\QuyDoiModel;
 use Session;
 use Auth;
 use DB;
@@ -122,5 +124,46 @@ where b.manv = c.manv and a.nguongoc = b.manv");
       }
       public function pNhanDauGia(Request $Request){
         
+      }
+      public function ChotDauGia($madaugia, Request $Request){
+        if($Request->has('chot')){
+           $infots = TaiSanThanhLyModel::where('madaugia',$madaugia)->where('trangthai',1)->get()->first();
+        $nguoimua = DauGiaThanhLyModel::where('madaugia',$madaugia)->orderBy('sohat','DESC')->get()->first();
+        $success = DauGiaThanhLyModel::where('id',$nguoimua->id)->update(['trangthai'=>1]);
+        \DB::beginTransaction();
+        if($success)
+        {
+           $fail =  DauGiaThanhLyModel::where('madaugia',$madaugia)->where('trangthai',0)->update(['trangthai'=>2]);
+           if($fail){
+              if(TaiSanThanhLyModel::where(['madaugia'=>$madaugia,'trangthai'=>1])->update(['trangthai'=>0,'nguoimua'=>$nguoimua->manv])){
+                  $ins = new GiaoDichModel;
+                  $ins->phiengd = 'TL.'.$madaugia.'.'.$nguoimua->sohat.'.1';
+                  $ins->manv   = $nguoimua->manv;
+                  $ins->noidung = 'Đấu giá thành công - trả hạt';
+                  $ins->sohat = -$nguoimua->sohat;
+                  $ins->nguoichuyen = $infots->nguongoc;
+                  $ins->save();
+                  $ins2 = new GiaoDichModel;
+                  $ins2->phiengd = 'TL.'.$madaugia.'.'.$nguoimua->sohat.'.2';
+                  $ins2->manv   = $infots->nguongoc;
+                  $ins2->noidung = 'Đấu giá thành công - nhận hạt';
+                  $ins2->sohat = $nguoimua->sohat;
+                  $ins2->nguoichuyen = $nguoimua->manv;
+                  $ins2->save();
+                  if( $ins->save() && $ins2->save()){
+                    \DB::commit();
+                    Session::flash('status','Đã chuyển tiền');
+                    return back();
+                  }
+                  else{
+                    \DB::rollback();
+                    return back();
+                  }
+              }
+           }
+        }
+      }
+       
+       
       }
 }

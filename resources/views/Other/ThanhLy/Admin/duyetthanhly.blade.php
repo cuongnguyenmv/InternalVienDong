@@ -58,6 +58,9 @@
                       <li class="list-group-item">Số seri  
                       	<input type="text" name="seri" value="{{$sp->seri}}"  class="form-control">
                       </li>
+                      <li class="list-group-item">Giá trị sản phẩm
+                        <input type="text" name="seri" value="{{$sp->giatri}}"  class="form-control">
+                      </li>
                       <li class="list-group-item">Định giá  
                       	<input type="number" name="dinhgia" value="{{$sp->dinhgia}}"  class="form-control">
                       </li>

@@ -124,10 +124,16 @@ class HomeController extends Controller
       ],$mess);
       $data = $Request->all();
       // $data['trangthai'] = 4;
-
-      $data['manv'] = Auth::User()->manv;
+      $manv =Auth::User()->manv;
+      $data['manv'] = $manv;
       $sohat = Auth::User()->sohat;
-      $dangmua = DauGiaThanhLyModel::where('trangthai',0)->where('manv',Auth::User()->manv)->select('sohat')->sum('sohat');
+      $mathangmua = \DB::select("select DISTINCT madaugia,manv,max(sohat) as 'sohat'
+ from CSVC_TAISAN_DauGiaThanhLy where manv = '$manv' and and trangthai = 0
+ group by madaugia,manv");
+      $dangmua = 0;
+      foreach ($mathangmua as $key) {
+        $dangmua += $key->sohat;   
+      }
       $conlai = $sohat - $dangmua;
       if($conlai < $Request->sohat )
       {
