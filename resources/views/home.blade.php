@@ -14,37 +14,25 @@ Trang chủ
 				</div>
 				<div class="card-body ">
 					<div class="row">
-						<div class="col-6">
-							<img src="{{URL::asset('template/app-assets/images/slider/slider-1.png')}}" width="100%">
+						<div class="col-12 col-md-6 col-xl-6">
+							<img src="{{URL::asset('images')}}/{{$tintuc->first()->hinh}}" width="100%">
 							<div class="col-12">
-								<h5 class="pt-1">Viễn Đông .com</h5>
-								
-								<p>Nội dung</p>
+								<h4 class="pt-1 text-danger">{{$tintuc->first()->tieude}}</h4>
+								<p><i class="fa fa-clock-o"></i> {{Date('d-m-Y',strtotime($tintuc->first()->ngaydang))}}</p>
+								<p>{{$tintuc->first()->gioithieu}}</p>
 							</div>
 						</div>
-						<div class="col-6">
+						<div class="col-12 col-md-6 col-xl-6" style="overflow-y: scroll; height:500px;">
 							<ul>
+								@foreach($tintuc as $key)
+								<a href="./tin-tuc/{{$key->id}}">
 								<li class="dropdown-item">
-									<h2 class="text-danger">Tin tức ngày 02/12/2019</h2>
-									<p>Nội dung</p>
+									<h2 class="text-danger">{{$key->tieude}}</h2>
+									<p><i class="fa fa-clock-o"></i> {{Date('d-m-Y',strtotime($key->ngaydang))}}</p>
+									<p>{{$key->gioithieu}}</p>
 									<hr>
-								</li>
-								<li class="dropdown-item">
-									<h2 class="text-danger">Tin tức ngày 02/12/2019</h2>
-									<p>Nội dung</p>
-									<hr>
-								</li>
-								<li class="dropdown-item">
-									<h2 class="text-danger">Tin tức ngày 02/12/2019</h2>
-									<p>Nội dung</p>
-									<hr>
-								</li>
-								<li class="dropdown-item">
-									<h2 class="text-danger">Tin tức ngày 02/12/2019</h2>
-									<p><i class="fa fa-clock-o"></i> 17:00 02/12/2019</p>
-									<p>Nội dung</p>
-									<hr>
-								</li>
+								</li></a>
+								@endforeach
 							</ul>
 						</div>
 					</div>

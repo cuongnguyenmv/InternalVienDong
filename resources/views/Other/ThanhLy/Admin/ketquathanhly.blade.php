@@ -60,7 +60,6 @@
 <script type="text/javascript">
 	$('table').DataTable({
 		"aLengthMenu": [[3, 50, 100, -1], [3, 50, 100, "All"]],
-		
 		"bLengthChange": false,
 	    "bFilter": false,
 	    "bInfo": false,

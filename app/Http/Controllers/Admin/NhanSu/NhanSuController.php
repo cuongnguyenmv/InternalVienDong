@@ -40,7 +40,8 @@ class NhanSuController extends Controller
 		return view('Admin.NhanSu.infonv')->with(['hoso'=>$hoso]);
 	}
 	public function vCapNhatNhanSu(){
-		return view('Admin.NhanSu.addNV');
+		$bophan = DonViModel::get();
+		return view('Admin.NhanSu.addNV')->with(['bophan'=>$bophan]);
 	}
 	public function pCapNhatNhanSu(Request $Request){
 

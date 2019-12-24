@@ -12,7 +12,8 @@
 					<div class="row">
 						<div class="col-4">
 							<!-- <img src="{{URL::asset('images/NhanVien/130218186M.jpg')}}" width="100%"> -->
-							<a href="#"> <img src="{{URL::asset('template/app-assets/images/avatar.jpg')}}" width="100%"> </a>
+							<a href="#" > <img src="{{URL::asset('template/app-assets/images/avatar.jpg')}}" width="100%" id="showpreview2"> </a>
+							<input type="file" name="hinh" class="form-control" id="previewimg2">
 						</div>
 						<div class="col-8">
 							<h5 class="form-section"><i class="fa fa-users"></i>Thông tin cơ bản</h5>
@@ -79,8 +80,8 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<label class="text-bold-600">Bộ phận</label>
-								<input type="text" name="thuocdv" class="form-control input-text-dotted">
+								<label class="text-bold-600">Chuyên môn</label>
+								<input type="text" name="chuyenmon" class="form-control input-text-dotted">
 							</div>
 							<div class="form-group">
 								<label class="text-bold-600">Chức vụ</label>
@@ -89,8 +90,14 @@
 						</div>
 						<div class="col-6">
 							<div class="form-group">
-								<label class="text-bold-600">Chuyên môn</label>
-								<input type="text" name="chuyenmon" class="form-control input-text-dotted">
+								<label class="text-bold-600">Bộ phận</label>
+								<select class="form-control input-text-dotted" name="thuocdv" required="">
+									<option >Chọn ...</option>
+									@foreach($bophan as $key)
+									<option value="{{$key->madv}}">{{$key->tendv}}</option>
+									@endforeach	
+								</select>
+								
 							</div>
 							<div class="form-group">
 								<label class="text-bold-600">Bằng cấp</label>
@@ -135,6 +142,10 @@
 							</div>
 							
 						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col-12">
+						<button class="btn btn-primary float-right">Save</button></div>
 					</div>
 				</form>
 			</div>

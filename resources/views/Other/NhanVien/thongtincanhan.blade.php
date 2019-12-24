@@ -92,25 +92,27 @@
       	</div>
       </div>
       <div class="tab-pane" id="tab2" aria-labelledby="base-tab2">
-
+        <div class="row">
      	<table class="table table-striped table-bordered">
      		<thead>
      			<tr>
+            <th></th>
      				<th>Trải Nghiệm</th>
      				<th>Văn Hóa</th>
      				<th>Đào Tạo</th>
      				<th>Thưởng Phạt</th>
-     				<th>Điểm Cống Hiến</th>
+     				<th>Tổng</th>
      			</tr>
      		</thead>
      		<tbody>
      			@if(!empty($conghien))
      			<tr>
+            <td class="text-bold-600">Điểm cống hiến </td>
      				<td>{{$conghien->trainghiem}}</td>
      				<td>{{$conghien->vanhoa}}</td>
      				<td>{{$conghien->daotao}}</td>
      				<td>{{$conghien->tanggiam}}</td>
-     				<td>{{$conghien->diemtong}}</td>
+     				<td>{{$conghien->tongdiem}}</td>
      			</tr>
      			@else
      			<tr>
@@ -118,23 +120,92 @@
      			</tr>
      			@endif
      		</tbody>
-     	</table>
+     	</table></div>
+  <!-- đào tạo -->
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Tâm Lý</th>
+                <th>Kiến Thức</th>
+                <th>Kĩ Năng</th>
+                <th>Nghệ Thuật</th>
+                <th>Cộng Đồng</th>
+                <th>Thể Chất</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-bold-600">Điểm đào tạo</td>
+                <td>{{$daotao->TL}}</td>
+                <td>{{$daotao->KT}}</td>
+                <td>{{$daotao->KN}}</td>
+                <td>{{$daotao->NT}}</td>
+                <td>{{$daotao->CD}}</td>
+                <td>{{$daotao->TC}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- THưởng phạt -->
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+              
+                <th>Sự kiện</th>
+                <th>Nội dung</th>
+                <th>Điểm</th>
+                <th>Ngày tăng</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <?php $tongdiem =0; ?>
+              @foreach($thuongphat as $key)
+              <tr>
+                <td>{{$key->tentg}}</td>
+                <td>{{$key->noidungtg}}</td>
+                <td>{{$key->diem}}</td>
+                <td>{{Date('d-m-Y',strtotime($key->ngayhieuluc))}}</td>
+                <?php $tongdiem += $key->diem ?>
+              </tr>@endforeach
+            </tbody>
+            <tfoot>
+              <th colspan="2">Tổng điểm</th>
+              <th colspan="2">{{$tongdiem}}</th>
+             
+            </tfoot>
+          </table>
+        </div>
+      </div>
      	<!-- chart Đào tạo -->
      	 <div class="row">
            <div class="col-12">
-             <div class="card">
-               <div class="card-header">
-                 <h4 class="card-title">Chart Đào Tạo</h4>
-                 <a class="heading-elements-toggle"><i class="ft-ellipsis-h font-medium-3"></i></a>
-                 
-               </div>
-               <div class="card-content collapse show">
-                 <div class="card-body">
-                   <div id="donut-chart"></div>
-                 </div>
-               </div>
-             </div>
-           </div>
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">Donut Chart</h4>
+                  <a class="heading-elements-toggle"><i class="ft-ellipsis-h font-medium-3"></i></a>
+                  <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                      <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                      <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                      <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                      <li><a data-action="close"><i class="ft-x"></i></a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="card-content collapse show">
+                  <div class="card-body">
+                    <div id="donut-chart"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
          </div>
       </div>
       <div class="tab-pane" id="tab3" aria-labelledby="base-tab3">
@@ -154,8 +225,8 @@
         				<tbody>
         					<tr>
         						<td colspan="4">Tuổi vào làm</td>
-        						<td colspan="2">33</td>
-        						<td colspan="2">3300000</td>
+        						<td colspan="2">{{$banga->tuoivaolam}}</td>
+        						<td colspan="2">{{number_format($banga->tien)}}</td>
         					</tr>
         					<tr>
         						<td colspan="4">Kinh nghiệm làm việc được kiểm chứng  (ấn tượng ban đầu) - B1</td>
@@ -380,7 +451,7 @@
       		</div>
       		<hr>
       		<h4 class="menu-title col-12"><i class="fa fa-line-chart"></i>  Biểu Đồ</h4>
-      		<div class="col-6">
+      		<div class="col-6 col-md-6 col-xl-6 col-lg-6">
       			<div class="card">
                 <div class="card-header">
                   <h4 class="card-title">Lương theo nhóm</h4>
@@ -392,7 +463,7 @@
                 </div>
               </div>
       		</div>
-      		 <div class="col-6">
+      		 <div class="col-6 col-md-6 col-xl-6 col-lg-6">
       			<div class="card">
                 <div class="card-header">
                  <h4 class="card-title">Lương theo nhóm</h4>
@@ -416,10 +487,15 @@
 <script src="{{URL::asset('template/app-assets/vendors/js/charts/c3.min.js')}}" type="text/javascript"></script>
   <script type="text/javascript">
   	$(document).ready(function(){
-  			ChartDaoTao()
+
+  			ChartDaoTao('{{$daotao->TL}}','{{$daotao->KT}}','{{$daotao->KN}}','{{$daotao->NT}}','{{$daotao->CD}}','{{$daotao->TC}}')
 			ChartLuong()
 			ChartLuongThucLanh()
   	})
-  				
+$('table').DataTable({
+  "aLengthMenu": [[5, 50, 100, -1], [5, 50, 100, "All"]],
+   "bInfo": false,
+})
   </script>
+  <script src="{{URL::asset('template/app-assets/vendors/js/charts/echarts/echarts.js')}}" type="text/javascript"></script>
 @endsection

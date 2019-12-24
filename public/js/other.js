@@ -66,6 +66,7 @@ function HoSoNhanVien(){
 	})
 }
 function ChartDaoTao(tl,kt,kn,nt,cd,tc){
+
 var donutChart = c3.generate({
         bindto: '#donut-chart',
         color: {
@@ -96,11 +97,10 @@ var donutChart = c3.generate({
     });
 
     // Resize chart on sidebar width change
-    $(".menu-toggle").on('click', function() {
-        donutChart.resize();
-    });
+    // $(".menu-toggle").on('click', function() {
+    //     donutChart.resize();
+    // });
 }
-
 function ChartLuong(){
 	var dataOrder = c3.generate({
         bindto: '#data-order',
@@ -228,5 +228,41 @@ function kt_switch(){
                 break;
             }
         })
+    })
+}
+
+function getInfoByCard(){
+    $("#info").focus(function(event){
+        event.preventDefault()
+        $('#info').keypress(function(e){
+            if(e.which == 13){
+                var idcard = this.value
+                $.ajax({
+                    type:"get",
+                    url:'./../../nhan-vien/'+idcard,
+                    dataType:'json',
+                    success:function(data){console.log(data)
+                        var baseURL = window.location.protocol + "//"+window.location.host
+                        $("#hinh").attr('src',baseURL+'/images/NhanVien/'+data.info.manv+'.jpg')
+                        $("#manv").html(data.info.manv)
+                        $("#bophan").html(data.info.bophan)
+                        $("#hoten").html(data.info.hoten)
+                        $("#mucquydoi").html(data.mucquydoi)
+                        $("#diemch").html(data.diemch)
+                        $("#naptien").val(data.info.manv)
+                    }
+                })
+            }
+        })
+
+    })
+   
+   calcHatQuyDoi()
+}
+function calcHatQuyDoi(){
+    $("#sotien").keyup(function(){
+        var sotien = this.value
+        var quydoi = $('#mucquydoi').text() * sotien / 1000
+        $('#sohatquydoi').html(quydoi)
     })
 }

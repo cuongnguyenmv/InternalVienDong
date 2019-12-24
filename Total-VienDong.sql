@@ -202,10 +202,11 @@ loai nvarchar(10) not null,
 created_at date not null,
 updated_at date not null
 )
-
+select * FROM NHANSU_NHANVIEN_LUONG_TuoiVaoLam
+drop view NHANSU_NHANVIEN_LUONG_TuoiVaoLam
 create view NHANSU_NHANVIEN_LUONG_TuoiVaoLam
 as
-select a.manv,a.ngaychinhthuc,b.ngaysinh , (YEAR(a.ngaychinhthuc) - YEAR(b.ngaysinh)) *1.5*100000 as 'tien'   FROM NHANSU_MaNhanVien a , NHANSU_Nhanvien b
+select a.manv,a.ngaychinhthuc,b.ngaysinh, (YEAR(a.ngaychinhthuc) - YEAR(b.ngaysinh)) as 'tuoivaolam' , (YEAR(a.ngaychinhthuc) - YEAR(b.ngaysinh)) *1.5*100000 as 'tien'   FROM NHANSU_MaNhanVien a , NHANSU_Nhanvien b
 where a.manv = b.manv
 
 create table NHANSU_NHANVIEN_BANGLUONG_CoDinh(
@@ -282,9 +283,7 @@ created_at date not null,
 updated_at date not null
 )
 
-select * FROM CSVC_TAISAN_ThanhLy
-select * FROM USERS_VITIEN_GiaoDich
-select * From NHANSU_NHANVIEN_LUONG_TuoiVaoLam
+
 /*												Mua hàng								*/
 
 
@@ -305,6 +304,17 @@ select * From NHANSU_NHANVIEN_LUONG_TuoiVaoLam
 
 
 /*												Other Bỏ phiếu bình chọn								*/
+/*												News										*/
+create table NHANSU_TRUYENTHONG_News(
+id int identity(1,1) primary key,
+tieude nvarchar(200) not null,
+gioithieu nvarchar(100) not null,
+noidung nvarchar(max) not null,
+ngaydang date not null,
+hinh nvarchar(100) not null,
+created_at date not null,
+updated_at date not null
+)
 
 
 insert into NHANSU_DonVi values ('CSVC',N'Phòng Quản lý Cơ sở Vật chất','130603187T',getdate(),getdate())	
@@ -347,10 +357,30 @@ insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
   select manv from deleted )
   update users set sohat = (SELECT CASE WHEN SUM(sohat) is not null then SUM(sohat) else 0 end from USERS_VITIEN_GiaoDich where manv = @manv) where manv = @manv
  END
+  create trigger update_daotao on  NHANSU_CONGHIEN_DaoTao FOR
+ INSERT,UPDATE,DELETE
+ AS BEGIN
+  Declare @manv nvarchar(20)
+  SET NOCOUNT ON;
+  select @manv = (
+  select manv from inserted union all 
+  select manv from deleted )
+  update NHANSU_ThongKeCongHien set daotao  = (SELECT SUM(Tong) from NHANSU_CONGHIEN_DaoTao where manv  = @manv)
+ END
+ 
+  create trigger update_tangiam on  NHANSU_CONGHIEN_TangGiam FOR
+ INSERT,UPDATE,DELETE
+ AS BEGIN
+  Declare @manv nvarchar(20)
+  SET NOCOUNT ON;
+  select @manv = (
+  select manv from inserted union all 
+  select manv from deleted )
+  update NHANSU_ThongKeCongHien set tanggiam  = (SELECT SUM(diem) from NHANSU_CONGHIEN_TangGiam where manv  = @manv)
+ END
 
- drop trigger update_sohat
  select * FROM USERS_VITIEN_GiaoDich
- select * FROM USERS_VITIEN_MaQuyDoi
+ select * FROM NHANSU_CONGHIEN_TangGiam
  select * FROM 
   select * FROM USERS_VITIEN_MaQuyDoi
  insert into USERS_VITIEN_GiaoDich values ('QD1','180604297C',N'Mức cống hiến 1400',1400,3,null,'180604297C',getdate(),getdate())
@@ -380,5 +410,13 @@ insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
  select DISTINCT madaugia,manv,max(sohat)
  from CSVC_TAISAN_DauGiaThanhLy where manv = '130218186M' and trangthai = 0
  group by madaugia,manv
- insert into CSVC_TAISAN_DauGiaThanhLy values('CT.19.51-191219-002','CN17','130218186M',0,444,getdate(),getdate())
- insert into CSVC_TAISAN_DauGiaThanhLy values('CT.19.51-191219-003','CN17','130218186M',0,444,getdate(),getdate())
+ 
+
+ select * FROM NHANSU_NHANVIEN_BANGLUONG_CoDinh
+ 
+ select * FROM NHANSU_NHANVIEN_BANGLUONG_BienDong
+ select * FROM NHANSU_NHANVIEN_BANGLUONG_Thang
+
+ select * FROM NHANSU_ThongKeCongHien
+
+ 

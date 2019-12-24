@@ -40,7 +40,7 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
         <ul class="nav navbar-nav flex-row">
           <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
           <li class="nav-item">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="{{route('index')}}">
               <img class="brand-logo" alt="robust admin logo" src="{{URL::asset('images/logo.jpg')}}" style="width: 150px; height: auto" >
             </a>
           </li>
@@ -227,9 +227,9 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
             <li class="dropdown dropdown-user nav-item">
               <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                 @if(Auth::check())
-                <span class="avatar avatar-online">
-                  <img src="{{URL::asset('images/1.jpg')}}"
-                  alt="avatar"><i></i></span>
+           <!--      <span class="avatar avatar-online">
+                  <img src="{{URL::asset('images/NhanVien')}}/{{Auth::User()->manv}}.jpg"
+                  alt="avatar"><i></i></span> -->
                 <span class="user-name">{{Auth::User()->name}}</span>
                 @else
                  <span class="avatar avatar-online">

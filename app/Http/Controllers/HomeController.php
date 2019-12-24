@@ -14,6 +14,7 @@ use App\Model\KeToan\GiaoDichModel;
 use App\User;
 use App\NhanSu\CongHien\DaoTaoModel;
 use Auth;
+use App\Model\Other\TinTuc\BaiVietModel;
 class HomeController extends Controller
 {
     /**
@@ -33,12 +34,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+    
+        return view('home')->with(['tintuc'=>$tintuc]);
     }
     public function ThongTinCaNhanSearch($idcard){
-        $info = new NhanVien($idcard);
-        $info = $info->getInfo();
-        
+        $nv = new NhanVien($idcard);
+        $info = $nv->getInfo();
+        $mucquydoi = $nv->MucQuyDoiHat();
+        // dd($mucquydoi['diemch']);
+        return ['info'=>$info,'mucquydoi'=>$mucquydoi['mucquydoi'],'diemch'=>$mucquydoi['diemch']];
         // return view('Other.NhanVien.thongtincanhan')->with(['']);
     }
     public function SanPhamThanhLy(){
@@ -169,10 +173,19 @@ class HomeController extends Controller
       $conghien = ThongKeCongHienModel::where('manv',$manv)->get()->first();
       $info = collect(\DB::select(" select a.*,b.email,b.sdt,b.chucvu,b.hinh,b.ngaysinh,b.diachi FROM NHANSU_MaNhanVien a, NHANSU_Nhanvien b
  where a.manv = b.manv and a.manv = '$manv'"))->first();
-      $daotao =  \DB::select(" select manv, sum(TL) as 'TL' , sum(KT) as 'KT', sum(KN) as 'KN' , SUM(NT) as 'NT' , sum(CD) as 'CD' , SUM(TC) as 'TC',sum(Tong) as 'Tong'
+      $daotao =  collect(\DB::select("select manv, sum(TL) as 'TL' , sum(KT) as 'KT', sum(KN) as 'KN' , SUM(NT) as 'NT' , sum(CD) as 'CD' , SUM(TC) as 'TC',sum(Tong) as 'Tong'
  from NHANSU_CONGHIEN_DaoTao where manv = '$manv'
- group by manv");
-      return view('Other.NhanVien.thongtincanhan')->with(['conghien'=>$conghien,'info'=>$info,'daotao'=>$daotao]);
+ group by manv"))->first();
+      $thuongphat = \DB::select("select b.tentg,b.noidungtg,a.diem,a.ngayhieuluc FROM NHANSU_CONGHIEN_TangGiam a , NHANSU_TANGGIAM_KhaiBao b
+where a.matg = b.matg and manv = '$manv'");
+      $banga = collect(\DB::select(" select * FROM NHANSU_NHANVIEN_LUONG_TuoiVaoLam where manv='$manv'"))->first();
+      return view('Other.NhanVien.thongtincanhan')->with(['conghien'=>$conghien,'info'=>$info,
+        'daotao'=>$daotao,
+        'thuongphat'=>$thuongphat,
+        'banga' =>$banga,
+        // 'bangb' =>$bangb
+
+      ]);
     }
     
 }

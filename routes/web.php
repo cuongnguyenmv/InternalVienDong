@@ -29,6 +29,8 @@ Route::post('dau-gia-thanh-ly','HomeController@GuiDauGia')->name('dau-gia-thanh-
 Route::get('vi-tien','HomeController@ViTienCaNhan')->name('vi-tien');
 Route::get('my-profile','HomeController@MyProfile')->name('profile');
 Route::get('quy-doi-ch','HomeController@NhanMocCongHien')->name('quy-doi-ch');
+Route::get('tin-tuc/{id}','PublicController@DocTinTuc');
+
 Route::group(['prefix'=>'admin'],function(){
 	Route::get('news','Admin\AdminController@dashboard');
 
@@ -45,6 +47,8 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::get('/cap-nhat-luong-bd','Admin\NhanSu\NhanSuController@vCapNhatLuongBienDong');
 		Route::post('/cap-nhat-luong-bd','Admin\NhanSu\NhanSuController@pCapNhatBienDong');
 		Route::get('chot-luong','Admin\NhanSu\NhanSuController@ChotLuong');
+		Route::get('dang-tin-tuc','Admin\NhanSu\TruyenThongController@DangTinTuc');
+		Route::post('dang-tin-tuc','Admin\NhanSu\TruyenThongController@pDangTinTuc');
 	});
 	Route::group(['prefix'=>'csvc','middleware'=>['auth']],function(){
 		Route::get('duyet-tl','Admin\CSVC\CoSoVatChatController@ChiTietThanhLy')->name('duyet-tl');
@@ -59,8 +63,8 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::post('muc-quy-doi','Admin\KeToan\ViTienController@pCapNhatBangQuyDoi');
 		Route::get('quy-doi','Admin\KeToan\ViTienController@CacQuyDoi')->name('cac-quy-doi');
 		Route::post('quy-doi-tien-hat','Admin\KeToan\ViTienController@pTienHat')->name('tien-thanh-hat');
-		Route::post('quy-doi-tien-hat','Admin\KeToan\ViTienController@pHatTien')->name('hat-thanh-tien');
-
+		// Route::post('quy-doi-tien-hat','Admin\KeToan\ViTienController@pHatTien')->name('hat-thanh-tien');
+	
 	});
 });
 Auth::routes();

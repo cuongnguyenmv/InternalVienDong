@@ -9,6 +9,7 @@ use App\Model\NhanSu\ThongKeCongHienModel;
 use App\Model\NhanSu\MaNhanVienModel;
 use App\Events\ElectionEve;
 use Auth;
+use App\Model\Other\TinTuc\BaiVietModel;
 class PublicController extends Controller
 {
 	function __construct()
@@ -16,10 +17,15 @@ class PublicController extends Controller
 		$this->middleware('auth');
 	}
 	public function Index(){
-		return view('home');
+		  $tintuc = BaiVietModel::orderBy('ngaydang','DESC')->get();
+		return view('home')->with(['tintuc'=>$tintuc]);
 	}
     public function Events(){
     	return view('Other.News.events');
+    }
+    public function DocTinTuc($id){
+    	$tintuc = BaiVietModel::where('id',$id)->get()->first();
+    	return view('Other.TinTuc.tintuc')->with(['tintuc'=>$tintuc]);
     }
     
 }

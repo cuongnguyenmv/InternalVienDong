@@ -11,6 +11,7 @@ use App\Model\NhanSu\CongHien\TG_KhaiBaoModel;
 use App\Model\NhanSu\CongHien\DaoTaoModel;
 use App\Model\NhanSu\CongHien\TangGiamModel;
 use App\Model\NhanSu\CongHien\ThamNienModel;
+use App\Model\KeToan\QuyDoiModel;
 use Session;
 use Auth;
 use Carbon\Carbon;
@@ -29,6 +30,12 @@ class NhanVien
 	}
 	function getInfo(){
 		return  MaNhanVienModel::where('manv',$this->manv)->orWhere('idcard',$this->manv)->get()->first();
+	}
+	function MucQuyDoiHat(){
+		$manv = MaNhanVienModel::where('manv',$this->manv)->orWhere('idcard',$this->manv)->get()->first()->manv;
+		$diemch = ThongKeCongHienModel::where('manv',$manv)->get()->first()->tongdiem;
+		$mucquydoi = QuyDoiModel::where('mucconghien','<=',$diemch)->orderBy('mucconghien','DESC')->get()->first();
+		return ['diemch'=>$diemch,'mucquydoi'=>round($mucquydoi->tylethem,2)];
 	}
 	function getLuong(){
 		
