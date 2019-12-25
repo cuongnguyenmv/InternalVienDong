@@ -238,8 +238,13 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
                 <span class="user-name">{{Auth::User()->name}}</span>
                 @endif
               </a>
-              <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('profile')}}"><i class="ft-user"></i> Profile</a> <a class="dropdown-item"
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="{{route('profile')}}"><i class="ft-user"></i> Profile</a>
+                 <a class="dropdown-item"
                   href="{{route('vi-tien')}}"><i class="fa fa-credit-card"></i> Ví tiền</a>
+                  <a class="dropdown-item"
+                  href="{{route('bo-phieu-tin-nhiem')}}"><i class="icon-envelope-letter
+"></i> Bỏ phiếu tín nhiệm</a>
                 <!-- <a
                 class="dropdown-item" href="#"><i class="ft-mail"></i> My Inbox</a>
                   <a class="dropdown-item" href="#"><i class="ft-check-square"></i> Task</a><a class="dropdown-item"
@@ -278,6 +283,15 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
                 </li>
                 <li data-menu=""><a class="dropdown-item" href="{{route('v-bang-luong-nv')}}"
                   data-toggle="dropdown">Điều chỉnh lương</a>
+                </li>
+              </ul>
+            </li>
+             <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Hạt Nhân Văn Hóa</a>
+              <ul class="dropdown-menu">
+                <li data-menu=""><a class="dropdown-item" href="{{route('hoc-ki-hat-nhan')}}" data-toggle="dropdown">Học Kì Hạt Nhân</a>
+                </li>
+                <li data-menu=""><a class="dropdown-item" href="{{route('v-bang-luong-nv')}}"
+                  data-toggle="dropdown">Đăng ký hạt nhân</a>
                 </li>
               </ul>
             </li>

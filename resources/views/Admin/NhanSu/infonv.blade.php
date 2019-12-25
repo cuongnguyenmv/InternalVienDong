@@ -5,6 +5,11 @@
 		<div class="card col-12">
 		<div class="card-header">
 			<h2 class="card-title">Hồ sơ nhân viên</h2>
+			<div class="row mt-1">
+				<div class="col-12">
+					<a href="{{route('v-them-nv')}}" target="_blank"><button class="btn btn-primary" ><i class="fa fa-plus"></i></button></a>
+				</div>
+			</div>
 		</div>
 		<div class="card-body">
 			<table class="table table-striped">
@@ -14,25 +19,23 @@
 						<th>Mã nhân viên</th>
 						<th>Họ và tên</th>
 						<th>Bộ phận</th>
-						<th>Điểm cống hiến</th>
-						<th>Thành viên/ Hạt Nhân</th>
 						<th class="text-center"><i class="text-center fa fa-cog"></i></th>
 						
 					</tr>
 				</thead>
 				<tbody>
+					@foreach($hoso as $key)
 					<tr>
 						<td>1</td>
-						<td>170605195A</td>
-						<td>Lý Ngọc Trâm Anh</td>
-						<td>CSVC</td>
-						<td class="text-center">3000</td>
-						<td>Hạt nhân</td>
+						<td>{{$key->manv}}</td>
+						<td>{{$key->hoten}}</td>
+						<td>{{$key->bophan}}</td>
+						
 						<td>
-							<button class="btn btn-success xem-ho-so"  data-toggle="modal" data-target="#xlarge" data-action="170605195A"><i class="fa fa-eye"></i></button>
-							<button class="btn btn-warning "><i class="fa fa-pencil"></i></button>
+							<button class="btn btn-success xem-ho-so"  data-toggle="modal" data-target="#xlarge" data-action="{{$key->manv}}"><i class="fa fa-eye"></i></button>
+							<a href="./cap-nhat-ho-so/{{$key->manv}}"><button class="btn btn-warning "><i class="fa fa-pencil"></i></button></a>
 						</td>
-					</tr>
+					</tr>@endforeach
 				</tbody>
 			</table>
 		</div></div>

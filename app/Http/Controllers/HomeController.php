@@ -15,6 +15,7 @@ use App\User;
 use App\NhanSu\CongHien\DaoTaoModel;
 use Auth;
 use App\Model\Other\TinTuc\BaiVietModel;
+use Carbon\Carbon;
 class HomeController extends Controller
 {
     /**
@@ -186,6 +187,15 @@ where a.matg = b.matg and manv = '$manv'");
         // 'bangb' =>$bangb
 
       ]);
+    }
+    public function BoPhieuTinNhiem(){
+      date_default_timezone_set('Asia/Ho_Chi_Minh');
+      $manv = Auth::User()->manv;
+      $danhsach = 
+      $time = now();
+      $tgbophieu = Carbon::createFromFormat('Y-m-d','2019-12-25');
+      
+      dd(Date('d-m-Y',strtotime($tgbophieu)) == Date('d-m-Y',strtotime($time)));
     }
     
 }

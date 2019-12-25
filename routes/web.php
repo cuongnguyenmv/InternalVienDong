@@ -30,7 +30,8 @@ Route::get('vi-tien','HomeController@ViTienCaNhan')->name('vi-tien');
 Route::get('my-profile','HomeController@MyProfile')->name('profile');
 Route::get('quy-doi-ch','HomeController@NhanMocCongHien')->name('quy-doi-ch');
 Route::get('tin-tuc/{id}','PublicController@DocTinTuc');
-
+Route::get('bo-phieu-tin-nhiem','HomeController@BoPhieuTinNhiem')->name('bo-phieu-tin-nhiem');
+Route::post('bo-phieu-tin-nhiem','HomeController@pBoPhieuTinNhiem');
 Route::group(['prefix'=>'admin'],function(){
 	Route::get('news','Admin\AdminController@dashboard');
 
@@ -39,6 +40,8 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::get('/ho-so-nv/{manv}','Admin\NhanSu\NhanSuController@ViewInfo');
 		Route::get('/cap-nhat-nv','Admin\NhanSu\NhanSuController@vCapNhatNhanSu')->name('v-them-nv');
 		Route::post('/cap-nhat-nv','Admin\NhanSu\NhanSuController@pCapNhatNhanSu');
+		Route::get('/cap-nhat-ho-so/{manv}','Admin\NhanSu\NhanSuController@vCapNhatHoSo');
+		Route::post('/cap-nhat-ho-so/{manv}','Admin\NhanSu\NhanSuController@pCapNhatHoSo');
 		// Lương
 		Route::get('/khai-bao-luong','Admin\NhanSu\NhanSuController@vKhaiBaoLuong')->name('v-khai-bao-luong');
 		Route::post('/khai-bao-luong','Admin\NhanSu\NhanSuController@pKhaiBaoLuong');
@@ -47,6 +50,11 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::get('/cap-nhat-luong-bd','Admin\NhanSu\NhanSuController@vCapNhatLuongBienDong');
 		Route::post('/cap-nhat-luong-bd','Admin\NhanSu\NhanSuController@pCapNhatBienDong');
 		Route::get('chot-luong','Admin\NhanSu\NhanSuController@ChotLuong');
+		// Hạt Nhân Văn Hóa
+		Route::get('khai-bao-hoc-ki','Admin\NhanSu\NhanSuController@KhaiBaoHocKi')->name('hoc-ki-hat-nhan');
+		Route::post('khai-bao-hoc-ki','Admin\NhanSu\NhanSuController@pKhaiBaoHocKi');
+		Route::get('dang-ki-hat-nhan','Admin\NhanSu\NhanSuController@DangKiHatNhan');
+		// Tin tức
 		Route::get('dang-tin-tuc','Admin\NhanSu\TruyenThongController@DangTinTuc');
 		Route::post('dang-tin-tuc','Admin\NhanSu\TruyenThongController@pDangTinTuc');
 	});

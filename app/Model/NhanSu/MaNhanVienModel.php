@@ -10,7 +10,7 @@ class MaNhanVienModel extends Model
     protected $primaryKey = 'manv';
     protected $keyType = 'string';
     protected $fillable = [
-    	'manv','hoten','ngaythuviec','ngayvaolam','ngaychinhthuc','ngayketthuc','trangthai','congty','idcard'
+    	'manv','hoten','ngaythuviec','ngayvaolam','ngaychinhthuc','ngayketthuc','trangthai','congty','idcard','bophan'
     ];
     public function ThongTiNhanVien(){
     	 return $this->hasOne('App\Model\NhanSu\NhanVienModel','manv','manv');

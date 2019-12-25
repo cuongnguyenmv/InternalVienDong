@@ -51,15 +51,13 @@ function viewLuongTheoThang(){
 function HoSoNhanVien(){
 	$('.xem-ho-so').click(function(){
 		event.preventDefault()
-		var manv = $(this).manv
+		var manv = $(this).data('action')
 		$.ajax({
 			type:'get',
 			url:'./ho-so-nv/'+manv,
 			success:function(data){
 				$('#modal-body-show').html(data)
-				ChartDaoTao()
-				ChartLuong()
-				ChartLuongThucLanh()
+				
 				
 			}
 		})

@@ -27,6 +27,7 @@ id int identity(1,1) not null,
 madv nvarchar(20) primary key ,
 tendv nvarchar(100) not null,
 truongdv nvarchar(100) not null,
+congty nvarchar(100) not null,
 created_at date not null,
 updated_at date not null
 )
@@ -34,10 +35,7 @@ updated_at date not null
 create table NHANSU_Nhanvien(
 id int identity(1,1) not null,
 manv nvarchar(20) primary key foreign key references NHANSU_MaNhanVien(manv), 
-tennv nvarchar(100) not null,
 /* thông tin công ty */
-congty nvarchar(100) not null,
-thuocdv nvarchar(20) foreign key references NHANSU_DonVi(madv) not null,
 chucvu nvarchar(100) not null,
 /* Thông tin việc làm */
 chuyenmon nvarchar(100) null,
@@ -304,7 +302,31 @@ updated_at date not null
 
 
 /*												Other Bỏ phiếu bình chọn								*/
+
+create table NHANSU_KiBoPhieu(
+kibophieu nvarchar(20) primary key,
+ngaybophieu date not null,
+thang as MONTH(ngaybophieu),
+publickey nvarchar(max) not null,
+created_at date not null,
+updated_at date not null
+)
+create table NHANSU_NHANVIEN_BoPhieuTinhNhiem(
+id int identity(1,1) primary key,
+kibophieu nvarchar(20) not null foreign key references NHANSU_KiBoPhieu(ki),
+nguoibophieu nvarchar(20) foreign key references NHANSU_MaNhanVien(manv),
+bophieucho nvarchar(20) foreign key references NHANSU_MaNhanVien(manv),
+thutubinhchon int not null,
+diemch float not null,
+sodiem float not null,
+ngaybinhchon date not null,
+created_at date not null,
+updated_at date not null
+)
+
 /*												News										*/
+
+select * FROM NHANSU_TRUYENTHONG_News
 create table NHANSU_TRUYENTHONG_News(
 id int identity(1,1) primary key,
 tieude nvarchar(200) not null,
@@ -323,7 +345,7 @@ insert into NHANSU_DonVi values ('KTVD',N'Phòng Kế Toán','100422176T',getdat
 insert into NHANSU_DonVi values ('PTDACD',N'Phòng Phát Triển Dự Án Cộng Đồng','180402179V',getdate(),getdate())	
 insert into NHANSU_DonVi values ('HCNS',N'Phòng Nhân Sự Hành Chính','180402281H',getdate(),getdate())
 insert into NHANSU_DonVi values ('BGD',N'Ban Giám Đốc','130218186M',getdate(),getdate())
-
+insert into NHANSU_DonVi values ('RD',N'R&D','160704188T',getdate(),getdate(),N'Viễn Đông')
 
 select * FROM NHANSU_MaNhanVien
 select * FROM NHANSU_NHANVIEN_BANGLUONG_Thang

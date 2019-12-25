@@ -10,7 +10,7 @@ class NhanVienModel extends Model
     protected $primaryKey = 'manv';
     protected $keyType = 'string';
     protected $fillable = [
-			'manv','tennv','congty','thuocdv','chucvu','chuyenmon','sobaohiem','ngaycongchuan','hinh','ngaysinh','diachi','quequan','sdt','email','bangcap','xeploai','truongtotnghiep','cmnd'
+			'manv','chucvu','chuyenmon','sobaohiem','ngaycongchuan','hinh','ngaysinh','diachi','quequan','sdt','email','bangcap','xeploai','truongtotnghiep','cmnd','noisinh'
     ];
     
 }

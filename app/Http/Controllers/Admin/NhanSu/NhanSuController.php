@@ -19,6 +19,8 @@ use App\Model\NhanSu\Luong\BangBDModel;
 use App\Model\NhanSu\Luong\BangCDModel;
 use App\Model\NhanSu\Luong\BangKhaiBaoModel;
 use App\Model\NhanSu\Luong\LuongThangModel;
+use App\Model\NhanSu\HatNhan\HocKiHatNhanModel;
+use App\Model\NhanSu\HatNhan\ThanhVienHatNhanModel;
 use Session;
 use Auth;
 use DB;
@@ -36,7 +38,9 @@ class NhanSuController extends Controller
 		];
 	}
 	public function vHoSoNhanVien(){
-		$hoso = 1;
+		$manv = Auth::User()->manv;
+		$congty = MaNhanVienModel::where('manv',$manv)->get()->first()->congty;
+		$hoso = MaNhanVienModel::where('congty',$congty)->where('trangthai',1)->get();
 		return view('Admin.NhanSu.infonv')->with(['hoso'=>$hoso]);
 	}
 	public function vCapNhatNhanSu(){
@@ -46,6 +50,44 @@ class NhanSuController extends Controller
 	public function pCapNhatNhanSu(Request $Request){
 
 	}
+	public function vCapNhatHoSo($manv){
+		$bophan = DonViModel::get();
+		$manhanvien = MaNhanVienModel::
+			join('NHANSU_Donvi','NHANSU_Donvi.madv','=','NHANSU_MaNhanVien.bophan')->
+			where('manv',$manv)->get()->first();
+		$nhanvien = NhanVienModel::where('manv',$manv)->get()->first();
+		return view('Admin.NhanSu.updateNV')->with(['bophan'=>$bophan,'manhanvien'=>$manhanvien,'nhanvien'=>$nhanvien]);
+	}
+	public function pCapNhatHoSo(Request $Request){
+		$mess = [
+			'required' => 'Kiểm tra các trường :Attribute không được bỏ trống',
+			'image' => 'phải là hình ảnh',
+			'mimes' => 'Chỉ chấp nhận đuôi .jpg|jpeg|png',
+			'max' => 'Hình không lớn hơn 4MB'
+		];
+		$Request->validate([
+			'manv'=>'required',
+			'hoten'=>'required',
+			'ngaysinh'=>'required',
+			'ngayvaolam'=>'required',
+			'ngayketthuc'=>'required_if:trangthai,0'
+		],$mess);
+		$data = $Request->all();
+		if($Request->has('hinh')){
+			$hinh = $Request->hinh->getClientOriginalName();
+			$extension = substr($hinh, strpos($hinh, "."));
+          	$hinh = str_replace($hinh,$data['manv'].$extension, $hinh);
+          	$Request->hinh->move('images/NhanVien',$hinh); 
+          	$data['hinh'] = $hinh;
+		}
+		$up = NhanVienModel::findorfail($data['manv']);
+		$manhanvien = MaNhanVienModel::findorfail($data['manv']);
+		if($up->update($data) && $manhanvien->update($data)){
+			Session::flash('status','Cập nhật thành công');
+			return back();
+		}else return back()->withErrors(['errors','Có lỗi xảy ra']);
+	}
+
 	public function vKhaiBaoLuong(){
 		$dieukhoan = BangKhaiBaoModel::get();
 		return view ("Admin.NhanSu.khaibaoluong",compact('dieukhoan'));
@@ -80,8 +122,22 @@ class NhanSuController extends Controller
 	}
 	public function ViewInfo($manv){
 		$thongtincanhan = MaNhanVienModel::with(['ThongTiNhanVien'])->where('manv',$manv)->get()->first();
+		$conghien = ThongKeCongHienModel::where('manv',$manv)->get()->first();
+      $info = collect(\DB::select(" select a.*,b.email,b.sdt,b.chucvu,b.hinh,b.ngaysinh,b.diachi FROM NHANSU_MaNhanVien a, NHANSU_Nhanvien b
+ where a.manv = b.manv and a.manv = '$manv'"))->first();
+      $daotao =  collect(\DB::select("select manv, sum(TL) as 'TL' , sum(KT) as 'KT', sum(KN) as 'KN' , SUM(NT) as 'NT' , sum(CD) as 'CD' , SUM(TC) as 'TC',sum(Tong) as 'Tong'
+ from NHANSU_CONGHIEN_DaoTao where manv = '$manv'
+ group by manv"))->first();
+      $thuongphat = \DB::select("select b.tentg,b.noidungtg,a.diem,a.ngayhieuluc FROM NHANSU_CONGHIEN_TangGiam a , NHANSU_TANGGIAM_KhaiBao b
+where a.matg = b.matg and manv = '$manv'");
+      $banga = collect(\DB::select(" select * FROM NHANSU_NHANVIEN_LUONG_TuoiVaoLam where manv='$manv'"))->first();
+		return view('Admin.NhanSu.ajax.detailinfo')->with(['conghien'=>$conghien,'info'=>$info,
+        'daotao'=>$daotao,
+        'thuongphat'=>$thuongphat,
+        'banga' =>$banga,
+        // 'bangb' =>$bangb
 
-		return view('Admin.NhanSu.ajax.detailinfo');
+      ]);
 	}
 	// public function test(Request $req){
 	// 		$file = $req->file;
@@ -129,5 +185,15 @@ class NhanSuController extends Controller
 		 $trainghiem = $conghien->trainghiem;
 		 $vanhoa = $conghien->vanhoa;
 		ThongKeCongHienModel::updateOrCreate(['manv'=>$manv],['trainghiem'=>$trainghiem,'vanhoa'=>$vanhoa,'daotao'=>$daotao]);
+	}
+	public function KhaiBaoHocKi(){
+		$hocki = HocKiHatNhanModel::orderBy('id','DESC')->get();
+		return view('Other.HatNhanVanHoa.khaibaohocki')->with(['hocki'=>$hocki]);
+	}
+	public function pKhaiBaoHocKi(Request $Request){
+		
+	}
+	public function DangKiHatNhan(){
+			
 	}
 }
