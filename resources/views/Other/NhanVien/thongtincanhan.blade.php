@@ -1,6 +1,6 @@
 @extends('admin_master')
 @section('body')
-<div class="app-content container center-layout mt-2">
+<div class="app-content container center-layout mt-2 ">
 	<div class="row">
    	<div class="col-12">
     		<ul class="nav nav-tabs">
@@ -20,9 +20,13 @@
         <a class="nav-link" id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4"
         aria-expanded="false">Biểu đồ lương</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" id="base-tab5" data-toggle="tab" aria-controls="tab5" href="#tab5"
+        aria-expanded="false">Các hoạt động</a>
+      </li>
     </ul>
 </div>
-<div class="tab-content px-1 pt-1 col-12">
+<div class="tab-content px-1 pt-1 col-12 card">
       <div role="tabpanel" class="tab-pane active" id="tab1" aria-expanded="true" aria-labelledby="base-tab1">
       	<div class="row">
       		<div class="col-3">
@@ -108,11 +112,11 @@
      			@if(!empty($conghien))
      			<tr>
             <td class="text-bold-600">Điểm cống hiến </td>
-     				<td>{{$conghien->trainghiem}}</td>
-     				<td>{{$conghien->vanhoa}}</td>
-     				<td>{{$conghien->daotao}}</td>
-     				<td>{{$conghien->tanggiam}}</td>
-     				<td>{{$conghien->tongdiem}}</td>
+     				<td>{{round($conghien->trainghiem,2)}}</td>
+     				<td>{{round($conghien->vanhoa,2)}}</td>
+     				<td>{{round($conghien->daotao,2)}}</td>
+     				<td>{{round($conghien->tanggiam,2)}}</td>
+     				<td>{{round($conghien->tongdiem,2)}}</td>
      			</tr>
      			@else
      			<tr>
@@ -147,6 +151,18 @@
                 <td>{{$daotao->TC}}</td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr>
+                 <th class="text-bold-600" colspan="6">Tổng điểm</th>
+                 <th>{{$daotao->TL+
+                     $daotao->KT+
+                     $daotao->KN+
+                     $daotao->NT+
+                     $daotao->CD+
+                     $daotao->TC}}</th>
+              </tr>
+              
+            </tfoot>
           </table>
         </div>
       </div>
@@ -210,7 +226,7 @@
       </div>
       <div class="tab-pane" id="tab3" aria-labelledby="base-tab3">
         	<div class="row">
-        		<h4 class="col-12">1. Điều khoản cố định (Tổng giá trị hiện tại: 1,000,000)</h4>
+        		<h4 class="col-12">1. Điều khoản cố định (Tổng giá trị hiện tại: {{number_format($banga->tien)}})</h4>
       			<hr>
         		<div class="col-12">
         			<h4 class="card-title"><i class="fa fa-bookmark"></i>  Bảng A-B</h4>
@@ -478,6 +494,99 @@
       		</div>
       	</div>
       </div>
+      <div role="tabpanel" class="tab-pane" id="tab5" aria-expanded="true" aria-labelledby="base-tab5">
+        <div class="row">
+          <div class="col-12 ">
+            <div class="card">
+              <div class="card-body">
+                <div class="row"> 
+                <div class="col-12 col-md-2">
+                  <div class="media-list list-group">
+                                          <a href="#" class="list-group-item list-group-item-action media tt_group">
+                        <div class="media-left">
+                          <img class="media-object rounded-circle" src="{{URL::asset('images/CB.png')}}" alt="Generic placeholder image" style="width: 30px;height: 30px;">
+                        </div>
+                        <div class="media-body">
+                          <h5 class="list-group-item-heading" data-group="CB">Chạy bộ</h5>
+                        </div>
+                      </a>
+                         <a href="#" class="list-group-item list-group-item-action media tt_group">
+                        <div class="media-left">
+                          <img class="media-object rounded-circle" src="{{URL::asset('images/CC.png')}}" alt="Generic placeholder image" style="width: 30px;height: 30px;">
+                        </div>
+                        <div class="media-body">
+                          <h5 class="list-group-item-heading" data-group="CC">Chuyên Cần</h5>
+                        </div>
+                      </a>
+                        <!--  <a href="#" class="list-group-item list-group-item-action media tt_group ">
+                        <div class="media-left">
+                          <img class="media-object rounded-circle" src="{{URL::asset('images/CGTK.png')}}" alt="Generic placeholder image" style="width: 30px;height: 30px;">
+                        </div>
+                        <div class="media-body">
+                          <h5 class="list-group-item-heading" data-group="CGTK">Cự Ly</h5>
+                        </div>
+                      </a>
+                         <a href="#" class="list-group-item list-group-item-action media tt_group">
+                        <div class="media-left ">
+                          <img class="media-object rounded-circle" src="{{URL::asset('images/GDT.png')}}" alt="Generic placeholder image" style="width: 30px;height: 30px;">
+                        </div>
+                        <div class="media-body">
+                          <h5 class="list-group-item-heading" data-group="GDT">Đào Tạo</h5>
+                        </div>
+                      </a> -->
+                         </div></div>
+                      <div class="col-12 col-md-10 show-tt" id="CB" style="display: none">
+                    <ul class="nav nav-tabs nav-linetriangle no-hover-bg">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="home-tab4" data-toggle="tab" href="#home4" aria-controls="home4" aria-expanded="true">Số liệu hiện tại</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab4" data-toggle="tab" href="#profile4" aria-controls="profile4" aria-expanded="false">Thành tựu</a>
+                      </li>
+                     
+                    </ul>
+                    <div class="tab-content px-1 pt-1">
+                      <div role="tabpanel" class="tab-pane active" id="home4" aria-labelledby="home-tab4" aria-expanded="true">
+                        <p>Số vòng hiện tại : {{$chaybo->sv}} vòng</p>
+                      </div>
+                      <div class="tab-pane " id="profile4" role="tabpanel" aria-labelledby="profile-tab4" aria-expanded="false">
+                        <p>Pudding candy canes sugar plum cookie chocolate cake powder
+                          croissant. Carrot cake tiramisu danish candy cake muffin
+                          croissant tart dessert. Tiramisu caramels candy canes chocolate
+                          cake sweet roll liquorice icing cupcake.</p>
+                      </div>
+                    </div>
+                      </div>
+                      <div class="col-12 col-md-10 show-tt" id="CC" style="display: none">
+                    <ul class="nav nav-tabs nav-linetriangle no-hover-bg">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="home-tab4" data-toggle="tab" href="#home5" aria-controls="home4" aria-expanded="true">Số ngày đi làm</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="profile-tab4" data-toggle="tab" href="#profile4" aria-controls="profile4" aria-expanded="false">Thành tựu</a>
+                      </li>
+                     
+                    </ul>
+                    <div class="tab-content px-1 pt-1">
+                      <div role="tabpanel" class="tab-pane active" id="home5" aria-labelledby="home-tab4" aria-expanded="true">
+                        <p>Số vòng hiện tại : 10 vòng</p>
+                         <p>Số vòng hiện tại : 10 vòng</p>
+                          <p>Số vòng hiện tại : 10 vòng</p>
+                      </div>
+                      <div class="tab-pane " id="profile4" role="tabpanel" aria-labelledby="profile-tab4" aria-expanded="false">
+                        <p>Pudding candy canes sugar plum cookie chocolate cake powder
+                          croissant. Carrot cake tiramisu danish candy cake muffin
+                          croissant tart dessert. Tiramisu caramels candy canes chocolate
+                          cake sweet roll liquorice icing cupcake.</p>
+                      </div>
+                    </div>
+                      </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
    </div>
 </div>
@@ -487,7 +596,7 @@
 <script src="{{URL::asset('template/app-assets/vendors/js/charts/c3.min.js')}}" type="text/javascript"></script>
   <script type="text/javascript">
   	$(document).ready(function(){
-
+      SwitchThanhTuu()
   			ChartDaoTao('{{$daotao->TL}}','{{$daotao->KT}}','{{$daotao->KN}}','{{$daotao->NT}}','{{$daotao->CD}}','{{$daotao->TC}}')
 			ChartLuong()
 			ChartLuongThucLanh()
@@ -496,6 +605,7 @@ $('table').DataTable({
   "aLengthMenu": [[5, 50, 100, -1], [5, 50, 100, "All"]],
    "bInfo": false,
 })
+
   </script>
   <script src="{{URL::asset('template/app-assets/vendors/js/charts/echarts/echarts.js')}}" type="text/javascript"></script>
 @endsection

@@ -8,6 +8,7 @@
   <meta name="keywords" content="admin template, robust admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
   <meta name="author" content="PIXINVENT">
   <title>Viễn Đông - @yield('title')</title>
+   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <!-- <link rel="apple-touch-icon" href="{{URL::asset('template/app-assets/images/ico/apple-icon-120.png')}}"> -->
   <link rel="shortcut icon" type="image/x-icon" href="{{URL::asset('images/vd.png')}}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Muli:300,400,500,700"
@@ -312,6 +313,41 @@ data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
               <!--   <li data-menu=""><a class="dropdown-item" href="{{route('nhan-dau-gia')}}" data-toggle="dropdown">Duyệt giá gửi</a>
                 </li> -->
                 <li data-menu=""><a class="dropdown-item" href="{{route('duyet-tl')}}" data-toggle="dropdown">Sản phẩm Thanh Lý Đợi Duyệt</a>
+                </li>
+               <!--  <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
+                  data-toggle="dropdown">Top Icon</a>
+                </li> -->
+              </ul>
+            </li>
+             <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Hoạt động</a>
+              <ul class="dropdown-menu">
+              <!--   <li data-menu=""><a class="dropdown-item" href="{{route('nhan-dau-gia')}}" data-toggle="dropdown">Duyệt giá gửi</a>
+                </li> -->
+                <li data-menu=""><a class="dropdown-item" href="{{route('hoat-dong-giai-chay')}}" data-toggle="dropdown">Giải chạy nội bộ</a>
+                </li>
+               <!--  <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
+                  data-toggle="dropdown">Top Icon</a>
+                </li> -->
+              </ul>
+            </li>
+            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Đào tạo nội bộ</a>
+              <ul class="dropdown-menu">
+              <!--   <li data-menu=""><a class="dropdown-item" href="{{route('nhan-dau-gia')}}" data-toggle="dropdown">Duyệt giá gửi</a>
+                </li> -->
+                <li data-menu=""><a class="dropdown-item" href="{{route('trang-dao-tao')}}" data-toggle="dropdown">Quản lý đào tạo</a>
+                </li>
+               <!--  <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
+                  data-toggle="dropdown">Top Icon</a>
+                </li> -->
+              </ul>
+            </li>
+            <li class="dropdown dropdown-submenu" data-menu="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Khác</a>
+              <ul class="dropdown-menu">
+              <!--   <li data-menu=""><a class="dropdown-item" href="{{route('nhan-dau-gia')}}" data-toggle="dropdown">Duyệt giá gửi</a>
+                </li> -->
+                <li data-menu=""><a class="dropdown-item" href="{{route('tao-bau-cu')}}" data-toggle="dropdown">Khởi tạo bầu cử</a>
+                </li>
+                <li data-menu=""><a class="dropdown-item" href="{{route('ket-qua-bo-phieu')}}" data-toggle="dropdown">Kết quả bầu cử</a>
                 </li>
                <!--  <li data-menu=""><a class="dropdown-item" href="../horizontal-top-icon-menu-template"
                   data-toggle="dropdown">Top Icon</a>

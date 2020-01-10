@@ -59,22 +59,24 @@ truongtotnghiep nvarchar(100) null,
 created_at date not null,
 updated_at date not null,
 )
+
 create table HATNHAN_HocKiHatNhan(
 id int identity(1,1) not null,
-mahk nvarchar(20) primary key,
+mahk nvarchar(100) primary key,
 ki nvarchar(100) not null,
 batdau date not null,
 ketthuc date not null,
 created_at date not null,
 updated_at date not null
 )
+
 create table NHANSU_DangKyHatNhan(
 id int identity(1,1) primary key,
 manv nvarchar(20) foreign key references NHANSU_MaNhanVien(manv),
 maphieudk nvarchar(20) not null,
-hocki nvarchar(20) not null,
+hocki nvarchar(100) not null,
 ngaydk date not null,
-ketthucdk date not null,
+ketthucdk date  null,
 created_at date not null,
 updated_at date not null
 )
@@ -304,22 +306,24 @@ updated_at date not null
 /*												Other Bỏ phiếu bình chọn								*/
 
 create table NHANSU_KiBoPhieu(
-kibophieu nvarchar(20) primary key,
+maki int identity(1,1) primary key,
+kibophieu nvarchar(100) not null,
 ngaybophieu date not null,
+ngayketthuc date not null,
 thang as MONTH(ngaybophieu),
-publickey nvarchar(max) not null,
+publickey nvarchar(max)  null,
 created_at date not null,
 updated_at date not null
 )
+select * FROM NHANSU_KiBoPhieu
 create table NHANSU_NHANVIEN_BoPhieuTinhNhiem(
 id int identity(1,1) primary key,
-kibophieu nvarchar(20) not null foreign key references NHANSU_KiBoPhieu(ki),
+maki int not null foreign key references NHANSU_KiBoPhieu(maki),
 nguoibophieu nvarchar(20) foreign key references NHANSU_MaNhanVien(manv),
 bophieucho nvarchar(20) foreign key references NHANSU_MaNhanVien(manv),
 thutubinhchon int not null,
 diemch float not null,
 sodiem float not null,
-ngaybinhchon date not null,
 created_at date not null,
 updated_at date not null
 )
@@ -337,7 +341,48 @@ hinh nvarchar(100) not null,
 created_at date not null,
 updated_at date not null
 )
+/*										Chạy bộ											*/
 
+/*										Chạy giải			
+	Mô tả cấu trúc: 
+		- tbl.GiaiChayBo : Khởi tạo giảy chạy bộ bao gồm ( số km , số vòng , ngày chạy ) 
+		- tbl.DangKyChay : Người chạy đăng ký giải chạy -> đợi check in 
+		- tbl.SoLieuChayBo : Kiểm tra checkin -> ghi nhận số vòng chạy mỗi khi quẹt 
+		 Thống kê dữ liệu bằng cách (Kiểm tra idcard - Ngày chạy - Count(records) )
+*/
+create table HOATDONG_CHAYBO_GiaiChayBo(
+machaybo nvarchar(20) primary key , 
+giaichay nvarchar(100) not null,
+sokm float not null,
+sovong float not null,
+ngaytochuc date not null,
+batdau datetime not null,
+ketthuc datetime null,
+trangthai int not null default(0) , /* 0:Đợi check in , 1: Đang chạy , 2:Đã chạy */
+created_at date not null,
+updated_at date not null
+)
+create table HOATDONG_CHAYBO_DangKyChayGiai(
+id int identity(1,1) primary key,
+idcard nvarchar(100) not null,
+madk nvarchar(20) not null,
+magiai nvarchar(20) foreign key references HOATDONG_CHAYBO_GiaiChayBo(machaybo) not null,
+hoten nvarchar(100) not null,
+checkin datetime null,
+trangthai int not null default(0), /* 0 : đợi check in , 1:Đang chạy , 2: Đã xong */
+pace nvarchar(20) null,
+ttg nvarchar(20) null,
+created_at date not null,
+updated_at date not null
+)
+create table HOATDONG_CHAYBO_SoLieuChayGiai(
+id int identity(1,1) primary key,
+idcard nvarchar(100) not null,
+ngaychay date not null default(GETDATE()),
+batdau time not null default(GETDATE()),
+created_at datetime not null,
+updated_at datetime not null
+)
 
 insert into NHANSU_DonVi values ('CSVC',N'Phòng Quản lý Cơ sở Vật chất','130603187T',getdate(),getdate())	
 insert into NHANSU_DonVi values ('TMVD',N'Phòng Thương Mại','100518183V',getdate(),getdate())
@@ -375,7 +420,7 @@ insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
   Declare @manv nvarchar(20)
   SET NOCOUNT ON;
   select @manv = (
-  select manv from inserted union all 
+  select manv from inserted union  
   select manv from deleted )
   update users set sohat = (SELECT CASE WHEN SUM(sohat) is not null then SUM(sohat) else 0 end from USERS_VITIEN_GiaoDich where manv = @manv) where manv = @manv
  END
@@ -385,7 +430,7 @@ insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
   Declare @manv nvarchar(20)
   SET NOCOUNT ON;
   select @manv = (
-  select manv from inserted union all 
+  select manv from inserted union  
   select manv from deleted )
   update NHANSU_ThongKeCongHien set daotao  = (SELECT SUM(Tong) from NHANSU_CONGHIEN_DaoTao where manv  = @manv)
  END
@@ -396,7 +441,7 @@ insert into Users_PhanQuyen values('130603187T','csvc',getdate(),getdate())
   Declare @manv nvarchar(20)
   SET NOCOUNT ON;
   select @manv = (
-  select manv from inserted union all 
+  select manv from inserted union  
   select manv from deleted )
   update NHANSU_ThongKeCongHien set tanggiam  = (SELECT SUM(diem) from NHANSU_CONGHIEN_TangGiam where manv  = @manv)
  END

@@ -45,6 +45,16 @@ Học Kì Hạt Nhân Văn Hóa
 			<div class="card box-shadow-1">
 				<div class="card-header">
 					<h2>Khai báo học kì</h2>
+					@if(Session::has('status'))
+					<div class="alert alert-success">{{Session::get('status')}}</div>
+					@endif
+					@if($errors->any())
+					<div class="alert alert-danger">
+						@foreach($errors as $err)
+							<p>{{$err}}</p>
+						@endforeach
+					</div>
+					@endif
 				</div>
 				<div class="card-body">
 					<div class="row">
@@ -53,20 +63,24 @@ Học Kì Hạt Nhân Văn Hóa
 								@csrf
 								<div class="form-group">
 									<label>Mã học kì</label>
-									<input type="tex" name="mahk" class="form-control">
+								<input type="text" name="mahk" class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Học kì</label>
-									<input type="tex" name="ki" class="form-control">
+									<input type="text" name="ki" class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Thời gian bắt đầu</label>
-									<input type="tex" name="batdau" class="form-control">
+									<input type="date" name="batdau" class="form-control">
 								</div>
 								<div class="form-group">
 									<label>Thời gian kết thúc</label>
-									<input type="tex" name="ketthuc" class="form-control">
+									<input type="date" name="ketthuc" class="form-control">
 								</div>
+								<div class="form-group">
+									<button class="btn btn-success float-right">Cập nhật</button>
+								</div>
+								
 							</form>
 						</div>
 					</div>

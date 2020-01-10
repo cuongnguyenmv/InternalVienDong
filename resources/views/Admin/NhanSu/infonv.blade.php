@@ -24,9 +24,10 @@
 					</tr>
 				</thead>
 				<tbody>
+					<?php $i = 1 ; ?>
 					@foreach($hoso as $key)
 					<tr>
-						<td>1</td>
+						<td>{{$i++}}</td>
 						<td>{{$key->manv}}</td>
 						<td>{{$key->hoten}}</td>
 						<td>{{$key->bophan}}</td>

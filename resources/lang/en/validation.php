@@ -145,6 +145,13 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'machaybo' => 'Mã chạy bộ',
+        'sokm' => 'Số kilomet',
+        'batdau' => 'Thời gian bắt đầu',
+        'sovong' => 'Số vòng',
+        'giaichay' => 'Tên giải chạy bộ',
+        'ketthuc' => 'Thời gian kết thúc'
+    ],
 
 ];

@@ -264,3 +264,16 @@ function calcHatQuyDoi(){
         $('#sohatquydoi').html(quydoi)
     })
 }
+function KetQuaBoPhieu(){
+    $('#kibophieu').change(function(){
+       var maki = this.value
+       window.open('./ket-qua-bo-phieu-ki/'+maki,'_blank')
+    })
+}
+function SwitchThanhTuu(){
+    $('.tt_group').click(function(){
+        $(".show-tt").fadeOut()
+        var group = $(this).find('.list-group-item-heading').data('group')
+        $('#'+group).fadeIn(1000)
+    })
+}

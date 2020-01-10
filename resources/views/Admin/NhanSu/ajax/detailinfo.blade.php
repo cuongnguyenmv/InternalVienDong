@@ -106,11 +106,11 @@
           @if(!empty($conghien))
           <tr>
             <td class="text-bold-600">Điểm cống hiến </td>
-            <td>{{$conghien->trainghiem}}</td>
-            <td>{{$conghien->vanhoa}}</td>
-            <td>{{$conghien->daotao}}</td>
-            <td>{{$conghien->tanggiam}}</td>
-            <td>{{$conghien->tongdiem}}</td>
+            <td>{{round($conghien->trainghiem,2)}}</td>
+            <td>{{round($conghien->vanhoa,2)}}</td>
+            <td>{{round($conghien->daotao,2)}}</td>
+            <td>{{round($conghien->tanggiam,2)}}</td>
+            <td>{{round($conghien->tongdiem,2)}}</td>
           </tr>
           @else
           <tr>

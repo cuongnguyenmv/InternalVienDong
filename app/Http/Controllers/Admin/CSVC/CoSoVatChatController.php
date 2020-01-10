@@ -21,6 +21,8 @@ use App\Model\ThanhLy\DauGiaThanhLyModel;
 use App\Model\ThanhLy\TaiSanThanhLyModel;          
 use App\Model\KeToan\GiaoDichModel;
 use App\Model\KeToan\QuyDoiModel;
+use App\Model\Other\BoPhieuDongCap\KetQuaBoPhieuModel;
+use App\Model\Other\BoPhieuDongCap\KiBoPhieuModel;
 use Session;
 use Auth;
 use DB;
@@ -165,5 +167,47 @@ where b.manv = c.manv and a.nguongoc = b.manv");
       }
        
        
+      }
+      public function KhoiTaoBoPhieuDongCap(){
+        return view('Other.BoPhieuTinNhiem.khoitaobp');
+      }
+      public function pKhoiTaoBoPhieuDongCap(Request $Request){
+          if(KiBoPhieuModel::create($Request->all()))
+          {
+            Session::flash('status','Khởi tạo thành công chờ đợi kết quả');
+          }
+          return back();
+      }
+      public function XemKetQuaBoPhieu(){
+        $kibophieu = KiBoPhieuModel::orderBy('maki','ASC')->get();
+        $maki = $kibophieu->isNotEmpty() ? $kibophieu->first()->maki : 0;
+        $ketquaki = DB::select("select b.manv,b.hoten,sum(a.sodiem) as 'diembophieu' 
+        from NHANSU_NHANVIEN_BoPhieuTinhNhiem a , NHANSU_MaNhanVien b 
+        where a.bophieucho = b.manv and maki = '$maki'
+        group by b.manv,b.hoten,a.thutubinhchon order by diembophieu asc");
+        $songuoithamgia =  collect(DB::select("SELECT COUNT (DISTINCT nguoibophieu) as 'tong'
+from NHANSU_NHANVIEN_BoPhieuTinhNhiem where maki = '$maki'"))->first();
+        return view('Other.BoPhieuTinNhiem.ketquabophieu')->with(['kibophieu'=>$kibophieu,'ketqua'=>$ketquaki,'songuoi'=>$songuoithamgia]);
+      }
+      public function KetQuaBoPhieu($maki){
+        $kibophieu = KiBoPhieuModel::get();
+        $ketquaki = DB::select("select b.manv,b.hoten,sum(a.sodiem) as 'diembophieu' 
+        from NHANSU_NHANVIEN_BoPhieuTinhNhiem a , NHANSU_MaNhanVien b 
+        where a.bophieucho = b.manv and maki = '$maki'
+        group by b.manv,b.hoten,a.thutubinhchon order by diembophieu asc");
+    
+          return view('Other.BoPhieuTinNhiem.ketquabophieu')->with(['kibophieu'=>$kibophieu]);
+      }
+      public function thongke(){
+        $connect = DB::connection('sqlsrv2')->table('Running')->select('Date')->groupBy('Date')->orderBy('Date','ASC')->get();
+        $query = "select 
+          a.Fullname ";
+        $endquery = "  FROM Runner a , Running b
+          where a.Id_card = b.ID_Card group by a.Fullname";
+          echo $query;
+            foreach ($connect as $key ) {
+            echo ", SUM(CASE WHEN Date = '".$key->Date."' then b.Count else 0 end) as '".$key->Date."'<br>";
+        }
+        echo $endquery;
       }
 }

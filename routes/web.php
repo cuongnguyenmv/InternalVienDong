@@ -65,6 +65,22 @@ Route::group(['prefix'=>'admin'],function(){
 		Route::get('ket-qua-dau-gia/{madaugia}','Admin\CSVC\CoSoVatChatController@KetQuaDauGia');
 		Route::post('ket-qua-dau-gia/{madaugia}','Admin\CSVC\CoSoVatChatController@ChotDauGia');
 		Route::get('nhan-dau-gia','Admin\CSVC\CoSoVatChatController@NhanGiaDau')->name('nhan-dau-gia');
+		// bỏ phiếu bầu đồng cấp
+		Route::get('khoi-tao-bo-phieu','Admin\CSVC\CoSoVatChatController@KhoiTaoBoPhieuDongCap')->name('tao-bau-cu');
+		Route::post('khoi-tao-bo-phieu','Admin\CSVC\CoSoVatChatController@pKhoiTaoBoPhieuDongCap');
+		Route::get('ket-qua-bo-phieu','Admin\CSVC\CoSoVatChatController@XemKetQuaBoPhieu')->name('ket-qua-bo-phieu');
+		Route::get('ket-qua-bo-phieu-ki/{maki}','Admin\CSVC\CoSoVatChatController@KetQuaBoPhieu');
+		// Hoạt động giải chạy nội bộ
+		Route::get('hoat-dong-giai-chay','Admin\CSVC\HoatDongChayBoController@TrangChayBo')->name('hoat-dong-giai-chay');
+		Route::post('hoat-dong-giai-chay','Admin\CSVC\HoatDongChayBoController@KhoiTaoGiaiChay');
+		Route::post('dang-ky-giai-chay','Admin\CSVC\HoatDongChayBoController@DangKyGiaiChay')->name('import-chay-bo');
+		Route::get('giai-chay','Admin\CSVC\HoatDongChayBoController@TrangGhiNhan')->name('trang-ghi-nhan');
+		Route::get('check-in/{idcard}','Admin\CSVC\HoatDongChayBoController@CheckIn');
+		Route::get('bat-dau','Admin\CSVC\HoatDongChayBoController@GiaiChayBatDau');
+		Route::get('ghi-nhan/{idcard}','Admin\CSVC\HoatDongChayBoController@GhiNhanKetQua');
+		// Đào tạo nội bộ
+		Route::get('trang-dao-tao','Admin\CSVC\DaoTaoController@TrangDaoTao')->name('trang-dao-tao');
+		Route::post('import-diem-dao-tao','Admin\CSVC\DaoTaoController@ImportDaoTao')->name('import-diem-dao-tao');
 	});
 	Route::group(['prefix'=>'ke-toan'],function(){
 		Route::get('muc-quy-doi','Admin\KeToan\ViTienController@CapNhatBangQuyDoi')->name('muc-quy-doi');

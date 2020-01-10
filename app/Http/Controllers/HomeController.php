@@ -13,9 +13,14 @@ use App\Model\KeToan\QuyDoiModel;
 use App\Model\KeToan\GiaoDichModel;
 use App\User;
 use App\NhanSu\CongHien\DaoTaoModel;
+use App\Model\Other\BoPhieuDongCap\KetQuaBoPhieuModel;
+use App\Model\Other\BoPhieuDongCap\KiBoPhieuModel;
 use Auth;
 use App\Model\Other\TinTuc\BaiVietModel;
+use App\Model\NhanSu\HatNhan\ThanhVienHatNhanModel;
+use App\Model\NhanSu\HatNhan\HocKiHatNhanModel;
 use Carbon\Carbon;
+use DB;
 class HomeController extends Controller
 {
     /**
@@ -166,11 +171,11 @@ class HomeController extends Controller
     public function ViTienCaNhan(){
       $manv = Auth::User()->manv;
       $history = GiaoDichModel::where('manv',$manv)->orderBy('created_at','DESC')->get();
-
       return view('Other.NhanVien.vitien')->with(['history'=>$history]);
     }
     public function MyProfile(){
       $manv = Auth::User()->manv;
+      $idcard = MaNhanVienModel::where('manv',$manv)->select('idcard')->get()->first()->idcard;
       $conghien = ThongKeCongHienModel::where('manv',$manv)->get()->first();
       $info = collect(\DB::select(" select a.*,b.email,b.sdt,b.chucvu,b.hinh,b.ngaysinh,b.diachi FROM NHANSU_MaNhanVien a, NHANSU_Nhanvien b
  where a.manv = b.manv and a.manv = '$manv'"))->first();
@@ -180,22 +185,62 @@ class HomeController extends Controller
       $thuongphat = \DB::select("select b.tentg,b.noidungtg,a.diem,a.ngayhieuluc FROM NHANSU_CONGHIEN_TangGiam a , NHANSU_TANGGIAM_KhaiBao b
 where a.matg = b.matg and manv = '$manv'");
       $banga = collect(\DB::select(" select * FROM NHANSU_NHANVIEN_LUONG_TuoiVaoLam where manv='$manv'"))->first();
+      $chaybo = collect(DB::connection('sqlsrv2')->select("select a.Id_card,a.Fullname, sum(b.Count) as 'sv' 
+FROM
+Runner a , Running b
+where a.Id_card = b.ID_Card and a.Id_card = '$idcard'
+group by a.Id_card,a.Fullname 
+"))->first();
       return view('Other.NhanVien.thongtincanhan')->with(['conghien'=>$conghien,'info'=>$info,
         'daotao'=>$daotao,
         'thuongphat'=>$thuongphat,
         'banga' =>$banga,
         // 'bangb' =>$bangb
-
+        'chaybo' => $chaybo
       ]);
     }
     public function BoPhieuTinNhiem(){
       date_default_timezone_set('Asia/Ho_Chi_Minh');
       $manv = Auth::User()->manv;
-      $danhsach = 
       $time = now();
-      $tgbophieu = Carbon::createFromFormat('Y-m-d','2019-12-25');
+      $thongtinbophieu = KiBoPhieuModel::where('ngaybophieu','<=',$time)->where('ngayketthuc','>=',$time)->get();
+      $thamgia = ThanhVienHatNhanModel::where('manv',$manv)->get()->isNotEmpty();
+
+      if($thamgia && $thongtinbophieu->isNotEmpty()){
+        if(KetQuaBoPhieuModel::where(['nguoibophieu'=>$manv,'maki'=>$thongtinbophieu->first()->maki])->get()->isNotEmpty())
+          return "Bạn đã bỏ phiếu cho kì này";
+        $nhanvien = MaNhanVienModel::where('trangthai',1)->where('congty','Viễn Đông')->whereNotIn('manv',[$manv])->whereIn('manv',[\DB::raw("SELECT manv from NHANSU_DangKyHatNhan WHERE hocki <> '0'")])->get();
+      return view('Other.NhanVien.bophieutinnhiem')->with(['nhanvien'=>$nhanvien,'thongtinbophieu'=>$thongtinbophieu->first()]);
+    }else return back();
       
-      dd(Date('d-m-Y',strtotime($tgbophieu)) == Date('d-m-Y',strtotime($time)));
     }
+    public function pBoPhieuTinNhiem(Request $Request){
+      $manv = Auth::User()->manv;
+      $conghien = ThongKeCongHienModel::where('manv',$manv)->get()->first();
+      if(!empty($conghien)){
+        $diemtong = $conghien->tongdiem;
+        if(QuyDoiModel::where('mucconghien','<=',$diemtong)->orderBy('mucconghien','DESC')->get()->isNotEmpty())
+        $tyle = round(QuyDoiModel::where('mucconghien','<=',$diemtong)->orderBy('mucconghien','DESC')->get()->first()->tylebophieu,2);
+        else $tyle = 1;
+      }
+      else $diemtong = 0 ;
+      $data = $Request->all();
+      for ($i=0; $i < sizeof($data['stt']); $i++) { 
+         $stt = $data['stt'][$i];
+         $binhchon = $data['manv'][$i];
+         $kqbc = $stt * $tyle;
+         $maki = $data['maki'];
+
+          $ins = new KetQuaBoPhieuModel;
+          $ins->nguoibophieu = $manv;
+          $ins->maki = $maki;
+          $ins->bophieucho = $binhchon;
+          $ins->thutubinhchon = $stt;
+          $ins->diemch = $diemtong;
+          $ins->sodiem = $kqbc;
+          $ins->save();
+      }
+      return 'Bỏ phiếu thành công';
+   }
     
 }

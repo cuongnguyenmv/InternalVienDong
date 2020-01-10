@@ -191,9 +191,13 @@ where a.matg = b.matg and manv = '$manv'");
 		return view('Other.HatNhanVanHoa.khaibaohocki')->with(['hocki'=>$hocki]);
 	}
 	public function pKhaiBaoHocKi(Request $Request){
-		
+		$data = $Request->all();
+		if(HocKiHatNhanModel::updateOrCreate(['mahk'=>$Request->mahk],$data))
+			Session::flash('status','Cập nhật thành công');
+		else return back()->withErrors(['errors','Lỗi']);
+		return back();
 	}
 	public function DangKiHatNhan(){
-			
+
 	}
 }
