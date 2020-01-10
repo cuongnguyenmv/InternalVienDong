@@ -23,7 +23,7 @@
 							@foreach($solieu->where('sovong',16) as $key)
 							<div class="row border-top">
 										<div class="col-1 text-center">{{$stt16++}}</div>
-										<div class="col-5 text-center">{{$key->hoten}}</div>
+										<div class="col-5 h5 text-center">{{$key->hoten}}</div>
 										<div class="col-2 text-center">{{$key->runned}}</div>
 										<div class="col-2 text-center">@if($key->runned >= $key->sovong)
 											{{floor($key->sovong*330/$key->ttg)*60}}:{{$key->sovong*330%$key->ttg}}
@@ -55,7 +55,7 @@
 							@foreach($solieu->where('sovong',24) as $key)
 							<div class="row border-top">
 										<div class="col-1 text-center">{{$stt24++}}</div>
-										<div class="col-5 text-center">{{$key->hoten}}</div>
+										<div class="col-5 h5 text-center">{{$key->hoten}}</div>
 										<div class="col-2 text-center">{{$key->runned}}</div>
 										<div class="col-2 text-center">@if($key->runned >= $key->sovong)
 											{{floor($key->sovong*330/$key->ttg)*60}}:{{$key->sovong*330%$key->ttg}}
@@ -86,7 +86,7 @@
 							@foreach($solieu->where('sovong',32) as $key)
 							<div class="row border-top">
 										<div class="col-1 text-center">{{$stt32++}}</div>
-										<div class="col-5 text-center">{{$key->hoten}}</div>
+										<div class="col-5 h5 text-center">{{$key->hoten}}</div>
 										<div class="col-2 text-center">{{$key->runned}}</div>
 										<div class="col-2 text-center">@if($key->runned >= $key->sovong)
 											{{floor($key->sovong*330/$key->ttg)*60}}:{{$key->sovong*330%$key->ttg}}
