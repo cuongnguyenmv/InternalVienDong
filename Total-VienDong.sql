@@ -371,15 +371,16 @@ hoten nvarchar(100) not null,
 checkin datetime null,
 trangthai int not null default(0), /* 0 : đợi check in , 1:Đang chạy , 2: Đã xong */
 pace nvarchar(20) null,
-ttg nvarchar(20) null,
+ttg float not null default(0),
 created_at date not null,
 updated_at date not null
 )
+
 create table HOATDONG_CHAYBO_SoLieuChayGiai(
 id int identity(1,1) primary key,
 idcard nvarchar(100) not null,
 ngaychay date not null default(GETDATE()),
-batdau time not null default(GETDATE()),
+batdau datetime not null default(GETDATE()),
 created_at datetime not null,
 updated_at datetime not null
 )

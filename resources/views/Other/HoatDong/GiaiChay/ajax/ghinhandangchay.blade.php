@@ -25,8 +25,11 @@
 										<div class="col-1 text-center">{{$stt16++}}</div>
 										<div class="col-5 text-center">{{$key->hoten}}</div>
 										<div class="col-2 text-center">{{$key->runned}}</div>
-										<div class="col-2 text-center"></div>
-										<div class="col-2 text-center">1</div>
+										<div class="col-2 text-center">@if($key->runned >= $key->sovong)
+											{{floor($key->sovong*330/$key->ttg)*60}}:{{$key->sovong*330%$key->ttg}}
+											@endif
+										</div>
+										<div class="col-2 text-center">{{floor($key->ttg/60)}}:{{($key->ttg%60)}}</div>
 							</div>@endforeach
 						</div>
 					</div>
@@ -54,8 +57,10 @@
 										<div class="col-1 text-center">{{$stt24++}}</div>
 										<div class="col-5 text-center">{{$key->hoten}}</div>
 										<div class="col-2 text-center">{{$key->runned}}</div>
-										<div class="col-2 text-center">01:00</div>
-										<div class="col-2 text-center">1</div>
+										<div class="col-2 text-center">@if($key->runned >= $key->sovong)
+											{{floor($key->sovong*330/$key->ttg)*60}}:{{$key->sovong*330%$key->ttg}}
+											@endif</div>
+										<div class="col-2 text-center">{{floor($key->ttg/60)}}:{{($key->ttg%60)}}</div>
 							</div>@endforeach
 						</div>
 					</div>
@@ -83,8 +88,10 @@
 										<div class="col-1 text-center">{{$stt32++}}</div>
 										<div class="col-5 text-center">{{$key->hoten}}</div>
 										<div class="col-2 text-center">{{$key->runned}}</div>
-										<div class="col-2 text-center">01:00</div>
-										<div class="col-2 text-center">1</div>
+										<div class="col-2 text-center">@if($key->runned >= $key->sovong)
+											{{floor($key->sovong*330/$key->ttg)*60}}:{{$key->sovong*330%$key->ttg}}
+											@endif</div>
+										<div class="col-2 text-center">{{floor($key->ttg/60)}}:{{($key->ttg%60)}}</div>
 							</div>@endforeach
 						</div>
 					</div>
