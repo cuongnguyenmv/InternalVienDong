@@ -155,6 +155,7 @@ select a.idcard,a.hoten,a.madk,a.magiai,a.trangthai,b.sovong,a.checkin,count(c.i
                 from HOATDONG_CHAYBO_DangKyChayGiai a , HOATDONG_CHAYBO_GiaiChayBo b 
                 where a.magiai = b.machaybo and ngaytochuc = '$time' and a.idcard = '$idcard'"));
                 SoLieuChayGiaiModel::create(['idcard'=>$idcard,'ngaychay'=>$time]);
+                Session::flash('status','Đã ghi nhận số vòng hiện tại của bạn là: '.$runned.'/'.round($checksovong->sovong).' - Thời gian 1 vòng là : '.$tongtg.' (s)');
             }
             else 
                 Session::flash('error','Thời gian tối thiểu là 1 phút');
